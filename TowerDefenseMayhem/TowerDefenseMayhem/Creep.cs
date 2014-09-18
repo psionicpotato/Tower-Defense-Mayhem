@@ -8,11 +8,11 @@ namespace TowerDefenseMayhem
 {
     class Creep
     {
-        public int posX;
-        public int posY;
-        public double HP;
+        public int PosX;
+        public int PosY;
+        public double HitPoints;
 
-        public Creep(int _posX, int _posY, double _hp)
+        public Creep(int posX, int posY, double hitPoints)
         {
 
         }
