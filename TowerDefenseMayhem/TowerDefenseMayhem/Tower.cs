@@ -21,7 +21,7 @@ namespace TowerDefenseMayhem
             // set sprite position
             posX = _posX;
             posY = _posY;
-
+            
             // set sprite according to _type
 
             // set weapon
