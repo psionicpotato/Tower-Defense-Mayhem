@@ -1,2 +1,13 @@
-C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.exe.config
 C:\Users\VINH\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.exe.config
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.exe.config
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.exe
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.pdb
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\MainWindow.baml
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\MainWindow.g.cs
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\App.g.cs
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem_MarkupCompile.cache
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.g.resources
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.Properties.Resources.resources
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.csproj.GenerateResource.Cache
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.exe
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.pdb
