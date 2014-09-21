@@ -8,11 +8,12 @@ namespace TowerDefenseMayhem
 {
     class Tower
     {
-        // enum TowerType
-        public enum TowerType { Basic, Flame, Radial }
+        // spacial params
         public int PosX;
         public int PosY;
+
         public TowerType MyTowerType;
+        public enum TowerType { Basic, Flame, Radial }
         public Weapon MyWeapon;
         public Creep TargetCreep;
 
