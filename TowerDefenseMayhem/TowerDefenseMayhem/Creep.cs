@@ -18,7 +18,7 @@ namespace TowerDefenseMayhem
     	// Spacial params
         public int PosX; //pixels
         public int PosY; //pixels
-        public double Theta; //orientation, in radians
+        public double Theta; //orientation, in degrees
         public double Speed; //pixels per second
 
         // interaction params
@@ -27,7 +27,7 @@ namespace TowerDefenseMayhem
         public enum CreepType { Baby, Speedy, Tanky }
 
         // Constructor
-        public Creep(int posX, int posY, Type type )
+        public Creep(int posX, int posY, Type type)
         {
         	switch (type)
         	{
@@ -46,12 +46,12 @@ namespace TowerDefenseMayhem
         	}
         }
 
-        public void Update()
+        public void Update(double time_ms)
         {
         	// handle 'living' and 'dying' interactions
         	if (isAlive())
         	{
-	        	Move(); // etc
+	        	Move(time_ms); // etc
         	}
         	else
         	{
@@ -59,10 +59,10 @@ namespace TowerDefenseMayhem
         	}
         }
 
-        private void Move()
+        private void Move(double time_ms)
         {
-        	PosX += Speed * Math.Cos(Theta);
-        	PosY += Speed * Math.Sin(Theta);
+        	PosX += Speed * Math.Cos(Theta * Math.PI / 180);
+        	PosY += Speed * Math.Sin(Theta * Math.PI / 180);
         }
 
         private bool IsAlive()
