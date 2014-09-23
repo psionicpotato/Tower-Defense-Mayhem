@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace TowerDefenseMayhem
 {
@@ -35,19 +36,19 @@ namespace TowerDefenseMayhem
         }
 
         // change to dictionary instead? save the range already calculated and
-        //  pass it on to SetTargetNearest?
-        private Collection<Creep> FindCreepsInRange(Collection<Creep> creeps)
+        //  pass it on to SetTargetNearest?        
+        private List<Creep> FindCreepsInRange(List<Creep> creeps)
         {
             // loop through creeps, create collection of those close enough
             //  to attack
-            Collection<Creep> ans = new Collection<Creep>();
+            List<Creep> ans = new List<Creep>();
 
             foreach (Creep c in creeps)
             {
                 double hypDistance = 
                     Math.Sqrt(Math.Pow(Math.Abs(c.PosX - this.PosX), 2) 
                         + Math.Abs(c.PosY - this.PosY));
-                if (hypDistance <= Range) 
+                if (hypDistance <= MyWeapon.Range) 
                 {
                     ans.Add(c);
                 }
@@ -57,15 +58,15 @@ namespace TowerDefenseMayhem
         }
 
         // maybe include in FindCreepsInRange for now, easy enough to do
-        public void SetTargetNearest(Collection<Creep> creepsInRange)
+        public void SetTargetNearest(List<Creep> creepsInRange)
         {
             // loop through creep collection positions and find nearest one
         }
 
         // call this after current target leaves range or dies
-        public void AcquireNextTarget(Collection<Creep> globalCreeps)
+        public void AcquireNextTarget(List<Creep> globalCreeps)
         {
-            Collection<Creep> creepsInRange = new Collection<Creep>();
+            List<Creep> creepsInRange = new List<Creep>();
             creepsInRange = FindCreepsInRange(globalCreeps);
             SetTargetNearest(creepsInRange);
         }
@@ -74,14 +75,14 @@ namespace TowerDefenseMayhem
         {
             // pythagorean to find hypoteneus distance
             double hypDistance = 
-                Math.Sqrt(Math.Pow(Math.Abs(_creep.posX - this.posX), 2) 
-                    + Math.Abs(_creep.posY - this.posY));
+                Math.Sqrt(Math.Pow(Math.Abs(_creep.PosX - this.PosX), 2) 
+                    + Math.Abs(_creep.PosY - this.PosY));
 
             // is in range to attack?
-            if (hypDistance <= myWeapon.Range)
+            if (hypDistance <= MyWeapon.Range)
             {
                 // attack!
-                _creep.HP -= myWeapon.Damage;
+                _creep.HitPoints -= MyWeapon.Damage;
             }
         }
 

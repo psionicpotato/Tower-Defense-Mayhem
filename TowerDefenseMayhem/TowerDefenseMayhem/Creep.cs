@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Math;
+using System;
 
 ///<summary>
 /// Notes: 
@@ -27,19 +27,19 @@ namespace TowerDefenseMayhem
         public enum CreepType { Baby, Speedy, Tanky }
 
         // Constructor
-        public Creep(int posX, int posY, Type type)
+        public Creep(int posX, int posY, CreepType type)
         {
         	switch (type)
         	{
-        		case Baby:
+        		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 5;
         			break;
-        		case Speedy:
+        		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 10;
         			break;
-        		case Tanky:
+        		case CreepType.Tanky:
         			HitPoints = 30;
         			Speed = 4;
         			break;
@@ -49,7 +49,7 @@ namespace TowerDefenseMayhem
         public void Update(double time_ms)
         {
         	// handle 'living' and 'dying' interactions
-        	if (isAlive())
+        	if (IsAlive())
         	{
 	        	Move(time_ms); // etc
         	}
@@ -61,8 +61,8 @@ namespace TowerDefenseMayhem
 
         private void Move(double time_ms)
         {
-        	PosX += Speed * Math.Cos(Theta * Math.PI / 180);
-        	PosY += Speed * Math.Sin(Theta * Math.PI / 180);
+        	PosX += Convert.ToInt16(Speed * Math.Cos(Theta * Math.PI / 180.0));
+        	PosY += Convert.ToInt16(Speed * Math.Sin(Theta * Math.PI / 180.0));
         }
 
         private bool IsAlive()
