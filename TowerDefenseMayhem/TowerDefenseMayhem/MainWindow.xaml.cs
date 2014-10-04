@@ -21,24 +21,47 @@ namespace TowerDefenseMayhem
     public partial class MainWindow : Window
     {
         
-        
+        private int NextLevel;
+        private bool ReadyForNextLevel;
+        private Pathing Pathing;
+        private Money Money;
+
 
         public MainWindow()
         {
             InitializeComponent();
-            StartGame(true);
+            StartNewGame(true);
+            
         }
 
-        public void StartGame(bool isFirstGame)
+        public void StartNewGame(bool isFirstGame)
         {
-            //setup initial conditions
+            Pathing = new Pathing();
+            Money = new Money();
+            NextLevel = 1;
+            ReadyForNextLevel = true;
+            
             //clear everything from old game if it bool = false
         }
 
-       
+        private void StartNextLevel()
+        {
+            ReadyForNextLevel = false;
+        }
               
 
        
+        private void StartNextLevel_Click(object sender, EventArgs e)
+        {
+            if (ReadyForNextLevel)
+            {
+                StartNextLevel();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Breh, you gotta finish this level first!");
+            }
+        }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
@@ -54,13 +77,13 @@ namespace TowerDefenseMayhem
             MessageBoxResult result = System.Windows.MessageBox.Show("Start a New Game?", "", MessageBoxButton.OKCancel);
             if (result == MessageBoxResult.OK)
             {                
-                StartGame(false);
+                StartNewGame(false);
             }
         }
 
         private void DebugMoney_Click(object sender, RoutedEventArgs e)
         {
-            //call method to get more moneyz
+            Money.AddMoney(1000);
         }
 
 
