@@ -7,19 +7,38 @@ using System;
 
 ///<summary>
 /// Notes: 
-///   - not sure how we will handle Creep Path -> Orientation
 ///   -
 ///   -
 ///</summary>
 namespace TowerDefenseMayhem
 {
+    class Creeps
+    {
+        public static List<Creep> AllCreeps;
+        public void Update(TimeSpan timeSpan)
+        {
+            foreach (Creep creep in AllCreeps)
+            {
+                if (creep.IsAlive())
+                { /* alive = move */
+                    creep.Move(timeSpan);
+                }
+                else
+                { /* dead */
+                    AllCreeps.Remove(creep);
+                }
+            }
+        }
+    }
+
     class Creep
     {
     	// Spacial params
         public int PosX; //pixels
         public int PosY; //pixels
-        public double Theta; //orientation, in degrees
-        public double Speed; //pixels per second
+        public double Speed; //pixels per millisecond
+        public int[,] Path; //pixel positions
+        public int LegOfPath; //which leg of path it is currently on (index 0)
 
         // interaction params
         public double HitPoints;
@@ -27,8 +46,13 @@ namespace TowerDefenseMayhem
         public enum CreepType { Baby, Speedy, Tanky }
 
         // Constructor
-        public Creep(int posX, int posY, CreepType type)
+        public Creep(CreepType type, int[,] path)
         {
+            Path = path;
+            PosX = path[0, 0];
+            PosY = path[0, 1];
+
+            LegOfPath = 0;
         	switch (type)
         	{
         		case CreepType.Baby:
@@ -46,33 +70,87 @@ namespace TowerDefenseMayhem
         	}
         }
 
-        public void Update(double time_ms)
+        public void Move(TimeSpan timeSpan)
         {
-        	// handle 'living' and 'dying' interactions
-        	if (IsAlive())
-        	{
-	        	Move(time_ms); // etc
-        	}
-        	else
-        	{
-        		// die!
-        	}
+            // determine destination
+            int[] nextPoint = {Path[LegOfPath + 1, 0], Path[LegOfPath + 1, 1]};
+            int[] distToNextPoint = {PosX - nextPoint[0], PosY - nextPoint[1]};
+            
+            //TODO: there is deffinately a smarter way to do this
+            double direction = 0; // degrees
+            if (distToNextPoint[0] != 0)
+            {
+                if (distToNextPoint[0] > 0)
+                {
+                    direction = 0;
+                }
+                else
+                {
+                    direction = 180;
+                }
+            } 
+            else if (distToNextPoint[1] != 0)
+            {
+                if (distToNextPoint[1] > 0)
+                {
+                    direction = 90;
+                }
+                else
+                {
+                    direction = 270;
+                }
+            }
+
+            double projectedDelta = Speed * timeSpan.TotalMilliseconds;
+
+            // check if it will pass this or any future points (loop)
+            if ((distToNextPoint[0] > projectedDelta) || (distToNextPoint[1] > projectedDelta))
+            { /* it will go thru nextPoint */
+                LegOfPath++;
+                double distRemaining = 0;
+                if (direction == 0 || direction == 180)
+                {
+                    distRemaining = Math.Abs(distToNextPoint[0]);
+                }
+                else if (direction == 90 || direction == 270)
+                {
+                    distRemaining = Math.Abs(distToNextPoint[1]);
+                }
+                double timeTaken_ms = distRemaining / Speed;
+                PosX = nextPoint[0];
+                PosY = nextPoint[1];
+                Move(timeSpan - TimeSpan.FromMilliseconds(timeTaken_ms));
+            } 
+            else 
+            { /* move towards nextPoint */
+                switch (Convert.ToInt16(direction))
+                {
+                    case 0:
+                        PosX += Convert.ToInt16(Speed * timeSpan.TotalMilliseconds);
+                        break;
+                    case 90:
+                        PosY += Convert.ToInt16(Speed * timeSpan.TotalMilliseconds);
+                        break;
+                    case 180:
+                        PosX -= Convert.ToInt16(Speed * timeSpan.TotalMilliseconds);
+                        break;
+                    case 270:
+                        PosY -= Convert.ToInt16(Speed * timeSpan.TotalMilliseconds);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
-        private void Move(double time_ms)
-        {
-        	PosX += Convert.ToInt16(Speed * Math.Cos(Theta * Math.PI / 180.0));
-        	PosY += Convert.ToInt16(Speed * Math.Sin(Theta * Math.PI / 180.0));
-        }
-
-        private bool IsAlive()
+        public bool IsAlive()
         {
         	bool ans = true;
         	if (HitPoints <= 0)
         	{
         		ans = false;
         	}
-        	return false;
+        	return ans;
         }
     }
 }
