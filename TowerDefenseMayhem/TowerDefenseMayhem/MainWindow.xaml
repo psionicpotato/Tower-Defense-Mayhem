@@ -25,7 +25,7 @@
         </ToolBarPanel>
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Background="Green" Orientation="Horizontal">
             <TextBlock Width="100" FontSize="20" Text="Money:" Margin="20, 20, 0, 0"></TextBlock>
-            <TextBlock Width="100" Text="{Binding Path=DisplayMoney, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Width="100" FontSize="20" Margin ="5, 20, 0, 0 " Text="{Binding Path=DisplayMoney, UpdateSourceTrigger=PropertyChanged}" />
             <Button Name="myButton" Content="Start Next Level" Width="90" Height="23" Margin="55,25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="StartNextLevel_Click" />            
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" Background="Gray"></StackPanel>

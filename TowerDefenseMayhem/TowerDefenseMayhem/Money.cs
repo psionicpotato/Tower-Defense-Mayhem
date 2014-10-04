@@ -9,7 +9,14 @@ namespace TowerDefenseMayhem
 {
     class Money
     {
-        int Cash;
+        public int Cash { get; private set; }
+        public event EventHandler CashChange;
+        protected virtual void OnCashChange()
+        {
+            if (CashChange != null) { CashChange(this, EventArgs.Empty); }
+        }
+
+
 
         public Money()
         {
@@ -26,6 +33,7 @@ namespace TowerDefenseMayhem
             else
             {
                 Cash -= amount;
+                OnCashChange();
                 return true;
             }
         }
@@ -33,6 +41,7 @@ namespace TowerDefenseMayhem
         public void AddMoney(int amount)
         {
             Cash += amount;
+            OnCashChange();
         }
     }
 }

@@ -15,15 +15,13 @@ using System.Windows.Shapes;
 
 namespace TowerDefenseMayhem
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         
         private int NextLevel;
         private bool ReadyForNextLevel;
-        private Pathing Pathing;        
+        private Pathing Pathing;
+        private Money Money;
 
         
 
@@ -39,6 +37,8 @@ namespace TowerDefenseMayhem
         {
             Pathing = new Pathing();
             Money = new Money();
+            Money.CashChange += Source_CashChange;
+            DisplayMoney = 1000;
             NextLevel = 1;
             ReadyForNextLevel = true;
             
@@ -48,6 +48,20 @@ namespace TowerDefenseMayhem
         private void StartNextLevel()
         {
             ReadyForNextLevel = false;
+
+            Creeps creeps = new Creeps();
+
+            for (int i=0; i<5; i++)
+            {
+                Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel));
+                creeps.AllCreeps.Add(newCreep);
+            }
+
+            // time loop
+
+                // update (ms)
+            //creeps.Update(timeSpan);
+            
         }
               
 
@@ -82,22 +96,26 @@ namespace TowerDefenseMayhem
             }
         }
 
-        private Money Money;
+        
         private void DebugMoney_Click(object sender, RoutedEventArgs e)
         {
             Money.AddMoney(1000);           
         }
 
-
+        
         public int DisplayMoney
         {
             get { return (int)GetValue(MoneyProperty); }
             set { SetValue(MoneyProperty, value); }
         }
 
-        public static readonly DependencyProperty MoneyProperty = DependencyProperty.Register("DisplayMoney", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+        public static readonly DependencyProperty MoneyProperty = DependencyProperty.Register("DisplayMoney", typeof(int), typeof(MainWindow), new PropertyMetadata(1000));
 
-
+        
+        private void Source_CashChange(object sender, EventArgs e)
+        {
+            DisplayMoney = Money.Cash;
+        }
 
         private void ToolBar_Loaded(object sender, RoutedEventArgs e)
         {

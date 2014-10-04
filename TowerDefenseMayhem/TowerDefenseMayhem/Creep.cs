@@ -14,7 +14,7 @@ namespace TowerDefenseMayhem
 {
     class Creeps
     {
-        public static List<Creep> AllCreeps;
+        public List<Creep> AllCreeps = new List<Creep>();
         public void Update(TimeSpan timeSpan)
         {
             foreach (Creep creep in AllCreeps)
