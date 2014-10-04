@@ -23,13 +23,14 @@ namespace TowerDefenseMayhem
         
         private int NextLevel;
         private bool ReadyForNextLevel;
-        private Pathing Pathing;
-        private Money Money;
+        private Pathing Pathing;        
 
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;            
             StartNewGame(true);
             
         }
@@ -81,10 +82,21 @@ namespace TowerDefenseMayhem
             }
         }
 
+        private Money Money;
         private void DebugMoney_Click(object sender, RoutedEventArgs e)
         {
-            Money.AddMoney(1000);
+            Money.AddMoney(1000);           
         }
+
+
+        public int DisplayMoney
+        {
+            get { return (int)GetValue(MoneyProperty); }
+            set { SetValue(MoneyProperty, value); }
+        }
+
+        public static readonly DependencyProperty MoneyProperty = DependencyProperty.Register("DisplayMoney", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+
 
 
         private void ToolBar_Loaded(object sender, RoutedEventArgs e)
