@@ -105,14 +105,7 @@ namespace TowerDefenseMayhem
             
             //TODO: there is deffinately a smarter way to do this
             double direction = 0; // degrees
-            //try
-            //{
-            //    direction = Math.Atan2(distToNextPoint[1], distToNextPoint[0]);
-            //}
-            //catch
-            //{
-            //    direction = 0;
-            //}
+            //direction = Math.Atan2(distToNextPoint[1], distToNextPoint[0]);
 
             if (distToNextPoint[0] != 0)
             {
@@ -179,11 +172,16 @@ namespace TowerDefenseMayhem
                 }
 
                 // check if final destination reached
-
+                if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(1) - 1, 1])
+                {
+                    // die and take players life point
+                    MyCanvas.Dispatcher.Invoke(Die);
+                }
+                else
+                {
                     // redraw image
                     MyCanvas.Dispatcher.Invoke(UpdateImage);
-
-                    // or die and take players life point
+                }
             }
         }
 
@@ -193,6 +191,11 @@ namespace TowerDefenseMayhem
                         Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
             MyImage.SetValue(Canvas.TopProperty,
                 Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
+        }
+
+        public void Die()
+        {
+            MyImage = null;
         }
 
         public bool IsAlive()

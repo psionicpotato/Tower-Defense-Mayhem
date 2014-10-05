@@ -62,8 +62,8 @@ namespace TowerDefenseMayhem
             LevelOver = false;
 
             // Begin move creep worker
-            bw.WorkerReportsProgress = true;
-            bw.WorkerSupportsCancellation = true;
+            bw2.WorkerReportsProgress = true;
+
             bw2.DoWork += new DoWorkEventHandler(bw_SpawnCreeps);
             bw.DoWork += new DoWorkEventHandler(bw_MoveCreeps);
 
