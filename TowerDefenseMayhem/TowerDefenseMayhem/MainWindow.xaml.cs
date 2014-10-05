@@ -55,21 +55,29 @@ namespace TowerDefenseMayhem
         {
             ReadyForNextLevel = false;
 
-            Creeps = new Creeps();
+            Creeps = new Creeps();                     
 
-            
-            bool LevelOver = false;            
-            ThreadStart startSpawning = new ThreadStart(SpawnCreeps);
-            Thread thread = new Thread(startSpawning);
+            ThreadStart startMoving = new ThreadStart(MoveCreeps);
+            Thread thread = new Thread(startMoving);
+            thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
-            
-            DateTime dateTime = DateTime.Now;
-            // time loop
 
-                // update (ms)
+            for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
+            {
+                Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
+                Creeps.AllCreeps.Add(newCreep);
+                Thread.Sleep(500);
+            }                        
+        }
+        
+        private void MoveCreeps()
+        {
+            DateTime dateTime = DateTime.Now;
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(LoopTime);
             TimeSpan leftoverTime = TimeSpan.FromMilliseconds(0);
             int waitTwentyLoops = 0;
+            bool LevelOver = false;   
+
             while (!LevelOver)
             {
                 dateTime = DateTime.Now;
@@ -83,21 +91,15 @@ namespace TowerDefenseMayhem
                 {
                     break;
                 }
-                waitTwentyLoops++;
-                ReadyForNextLevel = true;
+                waitTwentyLoops++;                
             }
-            
-            
+
+            ReadyForNextLevel = true;
+            System.Windows.MessageBox.Show("done");
         }
-        
         private void SpawnCreeps()
         {
-            for (int i=0; i<Level.GetCreepCount(NextLevel); i++)
-            {
-                Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel));
-                Creeps.AllCreeps.Add(newCreep);
-                Thread.Sleep(500);
-            }
+            
         }
 
        
