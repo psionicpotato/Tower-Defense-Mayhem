@@ -25,8 +25,11 @@ namespace TowerDefenseMayhem
         private Money Money;
         private Creeps Creeps;
         private Level Level;
+        private Thread MainThread;        
+
 
         private const double LoopTime = 100;
+        private bool MakeNewCreep = false;
 
         
 
@@ -40,9 +43,11 @@ namespace TowerDefenseMayhem
 
         public void StartNewGame(bool isFirstGame)
         {
+            MainThread = Thread.CurrentThread;
             Pathing = new Pathing();
             Money = new Money();
             Level = new Level();
+            Creeps = new Creeps();
             Money.CashChange += Source_CashChange;
             DisplayMoney = 1000;
             NextLevel = 1;
@@ -55,18 +60,19 @@ namespace TowerDefenseMayhem
         {
             ReadyForNextLevel = false;
 
-            Creeps = new Creeps();                     
+                                 
 
             ThreadStart startMoving = new ThreadStart(MoveCreeps);
             Thread thread = new Thread(startMoving);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
 
+            MakeNewCreep = false;
+
             for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
-            {
-                Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
-                Creeps.AllCreeps.Add(newCreep);
+            {                                
                 Thread.Sleep(500);
+                MakeNewCreep = true;
             }                        
         }
         
@@ -80,14 +86,23 @@ namespace TowerDefenseMayhem
 
             while (!LevelOver)
             {
-                dateTime = DateTime.Now;
+                dateTime = DateTime.Now;                
+                if (MakeNewCreep)
+                {
+                    Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
+                    Creeps.AllCreeps.Add(newCreep);
+                    MakeNewCreep = false;
+                }
                 Creeps.Update(timeSpan);
                 if (DateTime.Now < dateTime + timeSpan)
                 {
                     leftoverTime = timeSpan - (DateTime.Now - dateTime);
-                    Thread.Sleep(leftoverTime);
+                    if (leftoverTime > TimeSpan.FromSeconds(0))
+                    {
+                        Thread.Sleep(leftoverTime);
+                    }                    
                 }
-                if (Creeps.AllCreeps.Count() == 0 && waitTwentyLoops > 20)
+                if (Creeps.AllCreeps.Count() == 0 && waitTwentyLoops > 80)
                 {
                     break;
                 }
