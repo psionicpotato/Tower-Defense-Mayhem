@@ -66,17 +66,17 @@ namespace TowerDefenseMayhem
         	{
         		case CreepType.Baby:
         			HitPoints = 5;
-        			Speed = 0.005;
+        			Speed = 0.01;
                     SetImageFromPath(@"..\..\Images\BabyCreep.png");
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
-        			Speed = 0.010;
+        			Speed = 0.02;
                     //SetImageFromPath(@"Images\SpeedyCreep.png");
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
-        			Speed = 0.004;
+        			Speed = 0.01;
                     //SetImageFromPath(@"Images\TankyCreep.png");
         			break;
         	}
@@ -98,7 +98,7 @@ namespace TowerDefenseMayhem
         {
             // determine destination
             int[] nextPoint = {Path[LegOfPath + 1, 0], Path[LegOfPath + 1, 1]};
-            int[] distToNextPoint = {PosX - nextPoint[0], PosY - nextPoint[1]};
+            int[] distToNextPoint = {nextPoint[0] - PosX, nextPoint[1] - PosY};
             
             //TODO: there is deffinately a smarter way to do this
             double direction = 0; // degrees
@@ -125,10 +125,11 @@ namespace TowerDefenseMayhem
                 }
             }
 
-            double projectedDelta = Speed * timeSpan.TotalMilliseconds;
+            double projectedDeltaX = Math.Cos(direction) * Speed * timeSpan.TotalMilliseconds;
+            double projectedDeltaY = Math.Sin(direction) * Speed * timeSpan.TotalMilliseconds;
 
             // check if it will pass this or any future points (loop)
-            if ((distToNextPoint[0] > projectedDelta) || (distToNextPoint[1] > projectedDelta))
+            if ((Math.Abs(distToNextPoint[0]) < projectedDeltaX) || (Math.Abs(distToNextPoint[1]) < projectedDeltaY))
             { /* it will go thru nextPoint */
                 LegOfPath++;
                 double distRemaining = 0;
