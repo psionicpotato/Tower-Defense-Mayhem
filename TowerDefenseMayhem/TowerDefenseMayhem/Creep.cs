@@ -66,17 +66,17 @@ namespace TowerDefenseMayhem
         	{
         		case CreepType.Baby:
         			HitPoints = 5;
-        			Speed = 5;
+        			Speed = 0.005;
                     SetImageFromPath(@"..\..\Images\BabyCreep.png");
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
-        			Speed = 10;
+        			Speed = 0.010;
                     //SetImageFromPath(@"Images\SpeedyCreep.png");
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
-        			Speed = 4;
+        			Speed = 0.004;
                     //SetImageFromPath(@"Images\TankyCreep.png");
         			break;
         	}
@@ -88,6 +88,10 @@ namespace TowerDefenseMayhem
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
             BitmapSource bitmapSource = dec.Frames[0];
             MyImage.Source = bitmapSource;
+
+            MyCanvas.Children.Add(MyImage);
+            MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX) - Math.Floor(bitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY) - Math.Floor(bitmapSource.Height / 2));
         }
 
         public void Move(TimeSpan timeSpan)
@@ -160,6 +164,10 @@ namespace TowerDefenseMayhem
                     default:
                         break;
                 }
+
+                // redraw image
+                //MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX));
+                //MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY));
             }
         }
 
