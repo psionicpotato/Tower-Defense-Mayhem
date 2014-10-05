@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Drawing;
@@ -51,7 +50,9 @@ namespace TowerDefenseMayhem
 
         // display params
         public Canvas MyCanvas;
-        public Image MyImage = new Image();
+        public BitmapSource MyBitmapSource;
+        public Image MyImage;
+        public string RelImagePath;
 
         // Constructor
         public Creep(CreepType type, int[,] path, Canvas myCanvas)
@@ -66,32 +67,34 @@ namespace TowerDefenseMayhem
         	{
         		case CreepType.Baby:
         			HitPoints = 5;
-        			Speed = 0.01;
-                    SetImageFromPath(@"..\..\Images\BabyCreep.png");
+        			Speed = 0.05;
+                    RelImagePath = @"..\..\Images\BabyCreep.png";
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
-        			Speed = 0.02;
+        			Speed = 0.2;
                     //SetImageFromPath(@"Images\SpeedyCreep.png");
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
-        			Speed = 0.01;
+        			Speed = 0.02;
                     //SetImageFromPath(@"Images\TankyCreep.png");
         			break;
         	}
+            MyCanvas.Dispatcher.Invoke(SetImageFromPath);
         }
 
-        private void SetImageFromPath(string relPath)
+        private void SetImageFromPath()
         {
-            Uri imguri = new Uri(relPath, UriKind.Relative);
+            Uri imguri = new Uri(RelImagePath, UriKind.Relative);
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            BitmapSource bitmapSource = dec.Frames[0];
-            MyImage.Source = bitmapSource;
+            MyBitmapSource = dec.Frames[0];
+            MyImage = new Image();
+            MyImage.Source = MyBitmapSource;
 
             MyCanvas.Children.Add(MyImage);
-            MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX) - Math.Floor(bitmapSource.Width / 2));
-            MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY) - Math.Floor(bitmapSource.Height / 2));
+            MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
         }
 
         public void Move(TimeSpan timeSpan)
@@ -102,6 +105,15 @@ namespace TowerDefenseMayhem
             
             //TODO: there is deffinately a smarter way to do this
             double direction = 0; // degrees
+            //try
+            //{
+            //    direction = Math.Atan2(distToNextPoint[1], distToNextPoint[0]);
+            //}
+            //catch
+            //{
+            //    direction = 0;
+            //}
+
             if (distToNextPoint[0] != 0)
             {
                 if (distToNextPoint[0] > 0)
@@ -112,7 +124,7 @@ namespace TowerDefenseMayhem
                 {
                     direction = 180;
                 }
-            } 
+            }
             else if (distToNextPoint[1] != 0)
             {
                 if (distToNextPoint[1] > 0)
@@ -166,10 +178,21 @@ namespace TowerDefenseMayhem
                         break;
                 }
 
-                // redraw image
-                MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX));
-                MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY));
+                // check if final destination reached
+
+                    // redraw image
+                    MyCanvas.Dispatcher.Invoke(UpdateImage);
+
+                    // or die and take players life point
             }
+        }
+
+        public void UpdateImage()
+        {
+            MyImage.SetValue(Canvas.LeftProperty,
+                        Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty,
+                Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
         }
 
         public bool IsAlive()
