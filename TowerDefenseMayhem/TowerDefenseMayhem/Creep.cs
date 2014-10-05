@@ -51,7 +51,7 @@ namespace TowerDefenseMayhem
 
         // display params
         public Canvas MyCanvas;
-        public Image MyImage;
+        public Image MyImage = new Image();
 
         // Constructor
         public Creep(CreepType type, int[,] path, Canvas myCanvas)
@@ -67,7 +67,7 @@ namespace TowerDefenseMayhem
         		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 5;
-                    SetImageFromPath(@"Images\BabyCreep.png");
+                    SetImageFromPath(@"..\..\Images\BabyCreep.png");
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
@@ -85,9 +85,9 @@ namespace TowerDefenseMayhem
         private void SetImageFromPath(string relPath)
         {
             Uri imguri = new Uri(relPath, UriKind.Relative);
-            BitmapImage ni = new BitmapImage(imguri);
-            MyImage = new Image();
-            MyImage.Source = ni;
+            PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            BitmapSource bitmapSource = dec.Frames[0];
+            MyImage.Source = bitmapSource;
         }
 
         public void Move(TimeSpan timeSpan)
