@@ -167,8 +167,8 @@ namespace TowerDefenseMayhem
                 }
 
                 // redraw image
-                //MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX));
-                //MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY));
+                MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX));
+                MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY));
             }
         }
 
