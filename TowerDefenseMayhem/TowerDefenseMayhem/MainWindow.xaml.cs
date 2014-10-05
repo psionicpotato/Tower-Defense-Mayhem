@@ -91,15 +91,11 @@ namespace TowerDefenseMayhem
                 {
                     break;
                 }
-                waitTwentyLoops++;                
+                waitTwentyLoops++;
             }
 
             ReadyForNextLevel = true;
             System.Windows.MessageBox.Show("done");
-        }
-        private void SpawnCreeps()
-        {
-            
         }
 
        
