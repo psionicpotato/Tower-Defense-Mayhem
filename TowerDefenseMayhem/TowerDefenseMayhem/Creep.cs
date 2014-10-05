@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using System.Windows.Shapes;
+using System.Windows.Controls;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 ///<summary>
 /// Notes: 
@@ -45,29 +49,45 @@ namespace TowerDefenseMayhem
         public CreepType Type;
         public enum CreepType { Baby, Speedy, Tanky }
 
+        // display params
+        public Canvas MyCanvas;
+        public Image MyImage;
+
         // Constructor
-        public Creep(CreepType type, int[,] path)
+        public Creep(CreepType type, int[,] path, Canvas myCanvas)
         {
             Path = path;
             PosX = path[0, 0];
             PosY = path[0, 1];
 
+            MyCanvas = myCanvas;
             LegOfPath = 0;
         	switch (type)
         	{
         		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 5;
+                    SetImageFromPath(@"Images\BabyCreep.png");
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 10;
+                    //SetImageFromPath(@"Images\SpeedyCreep.png");
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
         			Speed = 4;
+                    //SetImageFromPath(@"Images\TankyCreep.png");
         			break;
         	}
+        }
+
+        private void SetImageFromPath(string relPath)
+        {
+            Uri imguri = new Uri(relPath, UriKind.Relative);
+            BitmapImage ni = new BitmapImage(imguri);
+            MyImage = new Image();
+            MyImage.Source = ni;
         }
 
         public void Move(TimeSpan timeSpan)
