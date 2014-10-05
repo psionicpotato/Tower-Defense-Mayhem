@@ -25,11 +25,15 @@ namespace TowerDefenseMayhem
         private Money Money;
         private Creeps Creeps;
         private Level Level;
-        private Thread MainThread;        
 
+        public event EventHandler UpdateTime;
+        protected virtual void OnUpdateTime()
+        {
+            if (UpdateTime != null) { UpdateTime(this, EventArgs.Empty); }
+        }
 
         private const double LoopTime = 100;
-        private bool MakeNewCreep = false;
+        private bool UpdateCreeps = false;
 
         
 
@@ -43,12 +47,12 @@ namespace TowerDefenseMayhem
 
         public void StartNewGame(bool isFirstGame)
         {
-            MainThread = Thread.CurrentThread;
             Pathing = new Pathing();
             Money = new Money();
             Level = new Level();
             Creeps = new Creeps();
             Money.CashChange += Source_CashChange;
+            UpdateTime += Source_UpdateCreeps;
             DisplayMoney = 1000;
             NextLevel = 1;
             ReadyForNextLevel = true;
@@ -67,15 +71,16 @@ namespace TowerDefenseMayhem
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
 
-            MakeNewCreep = false;
-
             for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
             {                                
                 Thread.Sleep(500);
-                MakeNewCreep = true;
+                Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
+                Creeps.AllCreeps.Add(newCreep);
             }                        
         }
-        
+
+        private object locker = new object();
+
         private void MoveCreeps()
         {
             DateTime dateTime = DateTime.Now;
@@ -86,14 +91,9 @@ namespace TowerDefenseMayhem
 
             while (!LevelOver)
             {
-                dateTime = DateTime.Now;                
-                if (MakeNewCreep)
-                {
-                    Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
-                    Creeps.AllCreeps.Add(newCreep);
-                    MakeNewCreep = false;
-                }
-                Creeps.Update(timeSpan);
+                dateTime = DateTime.Now;
+                OnUpdateTime();
+ 
                 if (DateTime.Now < dateTime + timeSpan)
                 {
                     leftoverTime = timeSpan - (DateTime.Now - dateTime);
@@ -113,6 +113,14 @@ namespace TowerDefenseMayhem
             System.Windows.MessageBox.Show("done");
         }
 
+        private void Source_UpdateCreeps(object sender, EventArgs e)
+        {
+            if (sender.ToString() != Money.ToString())
+            {
+                TimeSpan timeSpan = TimeSpan.FromMilliseconds(LoopTime);
+                Creeps.Update(timeSpan);
+            }
+        }
        
         private void StartNextLevel_Click(object sender, EventArgs e)
         {
@@ -162,7 +170,10 @@ namespace TowerDefenseMayhem
         
         private void Source_CashChange(object sender, EventArgs e)
         {
-            DisplayMoney = Money.Cash;
+            if (sender.ToString() == Money.ToString())
+            {
+                DisplayMoney = Money.Cash;
+            }
         }
 
         private void ToolBar_Loaded(object sender, RoutedEventArgs e)
