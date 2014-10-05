@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
+using System.Timers;
 
 namespace TowerDefenseMayhem
 {
@@ -26,14 +27,16 @@ namespace TowerDefenseMayhem
         private Creeps Creeps;
         private Level Level;
 
-        public event EventHandler UpdateTime;
-        protected virtual void OnUpdateTime()
-        {
-            if (UpdateTime != null) { UpdateTime(this, EventArgs.Empty); }
-        }
+        private bool LevelOver = true;   
+
+        //public event EventHandler UpdateTime;
+        //protected virtual void OnUpdateTime()
+        //{
+        //    if (UpdateTime != null) { UpdateTime(this, EventArgs.Empty); }
+        //}
 
         private const double LoopTime = 100;
-        private bool UpdateCreeps = false;
+        //private bool UpdateCreeps = false;
 
         
 
@@ -42,7 +45,11 @@ namespace TowerDefenseMayhem
             InitializeComponent();
             DataContext = this;            
             StartNewGame(true);
-            
+
+            System.Windows.Forms.Timer myTimer = new System.Windows.Forms.Timer();
+            myTimer.Interval = 100;
+            myTimer.Tick += new EventHandler(TimerTickEvent);
+            myTimer.Start();
         }
 
         public void StartNewGame(bool isFirstGame)
@@ -52,7 +59,7 @@ namespace TowerDefenseMayhem
             Level = new Level();
             Creeps = new Creeps();
             Money.CashChange += Source_CashChange;
-            UpdateTime += Source_UpdateCreeps;
+            //UpdateTime += Source_UpdateCreeps;
             DisplayMoney = 1000;
             NextLevel = 1;
             ReadyForNextLevel = true;
@@ -63,36 +70,48 @@ namespace TowerDefenseMayhem
         private void StartNextLevel()
         {
             ReadyForNextLevel = false;
+            LevelOver = false;
 
                                  
 
-            ThreadStart startMoving = new ThreadStart(MoveCreeps);
-            Thread thread = new Thread(startMoving);
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            //ThreadStart startMoving = new ThreadStart(MoveCreeps);
+            //Thread thread = new Thread(startMoving);
+            //thread.SetApartmentState(ApartmentState.STA);
+            //thread.Start();
 
-            for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
+            for (int i = 0; i < 1; i++) //(int i = 0; i < Level.GetCreepCount(NextLevel); i++)
             {                                
-                Thread.Sleep(500);
+                //Thread.Sleep(500);
                 Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
                 Creeps.AllCreeps.Add(newCreep);
-            }                        
+            }
+            //MoveCreeps();
         }
 
         private object locker = new object();
+
+        private void TimerTickEvent(object sender, System.EventArgs e)
+        {
+            if (!LevelOver)
+            {
+                MoveCreeps();
+            }
+            
+        }
 
         private void MoveCreeps()
         {
             DateTime dateTime = DateTime.Now;
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(LoopTime);
             TimeSpan leftoverTime = TimeSpan.FromMilliseconds(0);
-            int waitTwentyLoops = 0;
-            bool LevelOver = false;   
+            int waitEightSeconds = 0;
+            
 
             while (!LevelOver)
             {
                 dateTime = DateTime.Now;
-                OnUpdateTime();
+                Creeps.Update(timeSpan);
+                //OnUpdateTime();
  
                 if (DateTime.Now < dateTime + timeSpan)
                 {
@@ -102,25 +121,25 @@ namespace TowerDefenseMayhem
                         Thread.Sleep(leftoverTime);
                     }                    
                 }
-                if (Creeps.AllCreeps.Count() == 0 && waitTwentyLoops > 80)
+                if (Creeps.AllCreeps.Count() == 0 && waitEightSeconds > 80)
                 {
                     break;
                 }
-                waitTwentyLoops++;
+                waitEightSeconds++;
             }
-
+            LevelOver = true;
             ReadyForNextLevel = true;
             System.Windows.MessageBox.Show("done");
         }
 
-        private void Source_UpdateCreeps(object sender, EventArgs e)
-        {
-            if (sender.ToString() != Money.ToString())
-            {
-                TimeSpan timeSpan = TimeSpan.FromMilliseconds(LoopTime);
-                Creeps.Update(timeSpan);
-            }
-        }
+        //private void Source_UpdateCreeps(object sender, EventArgs e)
+        //{
+        //    if (sender.ToString() != Money.ToString())
+        //    {
+        //        TimeSpan timeSpan = TimeSpan.FromMilliseconds(LoopTime);
+        //        Creeps.Update(timeSpan);
+        //    }
+        //}
        
         private void StartNextLevel_Click(object sender, EventArgs e)
         {
