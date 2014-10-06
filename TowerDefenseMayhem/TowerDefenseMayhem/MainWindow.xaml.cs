@@ -28,6 +28,7 @@ namespace TowerDefenseMayhem
         private Money Money;
         private Creeps Creeps;
         private Level Level;
+        private Player Player;
 
         private bool LevelOver = true;   
         private const double LoopTime = 20;
@@ -37,7 +38,6 @@ namespace TowerDefenseMayhem
             InitializeComponent();
             DataContext = this;            
             StartNewGame(true);
-
         }
 
         public void StartNewGame(bool isFirstGame)
@@ -46,8 +46,11 @@ namespace TowerDefenseMayhem
             Money = new Money();
             Level = new Level();
             Creeps = new Creeps();
+            Player = new Player();
             Money.CashChange += Source_CashChange;
+            Player.LifeChange += Source_LifeChange;
             DisplayMoney = 1000;
+            DisplayLives = 5;
             NextLevel = 1;
             ReadyForNextLevel = true;
             
@@ -183,6 +186,11 @@ namespace TowerDefenseMayhem
             Money.AddMoney(1000);           
         }
 
+        private void DebugLife_Click(object sender, RoutedEventArgs e)
+        {
+            Player.AddLives(5); ;
+        }
+
         
         private int DisplayMoney
         {
@@ -198,6 +206,23 @@ namespace TowerDefenseMayhem
             if (sender.ToString() == Money.ToString())
             {
                 DisplayMoney = Money.Cash;
+            }
+        }
+
+        private int DisplayLives
+        {
+            get { return (int)GetValue(LifePropery); }
+            set { SetValue(LifePropery, value); }
+        }
+
+        public static readonly DependencyProperty LifePropery = DependencyProperty.Register("DisplayLives", typeof(int), typeof(MainWindow), new PropertyMetadata(5));
+
+
+        private void Source_LifeChange(object sender, EventArgs e)
+        {
+            if (sender.ToString() == Player.ToString())
+            {
+                DisplayLives = Player.Lives;
             }
         }
 
