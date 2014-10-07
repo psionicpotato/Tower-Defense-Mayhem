@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 
+///<summary>
+///Note: use Queue rather than List for creeps in a tower's range
+///</summary>
 namespace TowerDefenseMayhem
 {
     class Tower
@@ -37,7 +40,7 @@ namespace TowerDefenseMayhem
 
         // change to dictionary instead? save the range already calculated and
         //  pass it on to SetTargetNearest?        
-        private List<Creep> FindCreepsInRange(List<Creep> creeps)
+        private List<Creep> CreepsInRange(List<Creep> allCreeps)
         {
             // loop through creeps, create collection of those close enough
             //  to attack
