@@ -191,6 +191,18 @@ namespace TowerDefenseMayhem
             Player.AddLives(5); ;
         }
 
+        public void ChangeLives(int lives)
+        {
+            if (lives > 0)
+            {
+                Player.AddLives(lives);
+            }
+            else
+            {
+                Player.LoseLives(lives);
+            }
+        }
+
         
         private int DisplayMoney
         {
