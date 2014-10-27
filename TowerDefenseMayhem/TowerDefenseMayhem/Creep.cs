@@ -82,12 +82,12 @@ namespace TowerDefenseMayhem
         		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 0.2;
-                    //SetImageFromPath(@"Images\SpeedyCreep.png");
+                    RelImagePath = @"..\..\Images\SpeedyCreep.png";
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
         			Speed = 0.02;
-                    //SetImageFromPath(@"Images\TankyCreep.png");
+                    //RelImagePath = @"..\..\Images\TankyCreep.png";
         			break;
         	}
             MyCanvas.Dispatcher.Invoke(SetImageFromPath);
