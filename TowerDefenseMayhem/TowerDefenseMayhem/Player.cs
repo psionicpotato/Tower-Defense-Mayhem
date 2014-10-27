@@ -27,10 +27,18 @@ namespace TowerDefenseMayhem
             OnLifeChange();
         }
 
-        public void LoseLives(int amount)
+        object locker;
+        public bool LoseLives(int amount)
         {
-            Lives += amount;
-            OnLifeChange();
+            lock(locker)
+            {
+                Lives += amount;
+                if (Lives < 0) { Lives = 0; }
+                OnLifeChange();
+
+                if (Lives == 0) { return true; }
+                return true;
+            }
         }
 
     }
