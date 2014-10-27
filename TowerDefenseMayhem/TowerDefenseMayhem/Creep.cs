@@ -63,9 +63,13 @@ namespace TowerDefenseMayhem
         public Image MyImage;
         public string RelImagePath;
 
+        private MainWindow MainWindow;
+
         // Constructor
-        public Creep(CreepType type, int[,] path, Canvas myCanvas)
+        public Creep(CreepType type, int[,] path, Canvas myCanvas, MainWindow mainWindow)
         {
+            MainWindow = mainWindow; 
+
             Path = path;
             PosX = path[0, 0];
             PosY = path[0, 1];
@@ -193,7 +197,7 @@ namespace TowerDefenseMayhem
                 {
                     // die and take players life point
                     MyCanvas.Dispatcher.Invoke(Die);
-                    MainWindow.LoseLives(1);
+                    MainWindow.ChangeLives(-1);
                 }
                 else
                 {

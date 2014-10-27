@@ -88,7 +88,7 @@ namespace TowerDefenseMayhem
                 for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
                 {
                     double spawnPeriod = 5;// seconds
-                    Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas);
+                    Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas, this);
                     Creeps.AllCreeps.Add(newCreep);
 
                     System.Threading.Thread.Sleep(TimeSpan.FromSeconds(spawnPeriod));
