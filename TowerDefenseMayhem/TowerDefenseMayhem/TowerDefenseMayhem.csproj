@@ -58,6 +58,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="Money.cs" />
     <Compile Include="Pathing.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Tower.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

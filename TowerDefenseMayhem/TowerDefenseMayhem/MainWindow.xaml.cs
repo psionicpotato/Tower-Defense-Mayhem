@@ -199,8 +199,14 @@ namespace TowerDefenseMayhem
             }
             else
             {
-                Player.LoseLives(lives);
+                bool lose = Player.LoseLives(lives);
+                if (!lose) { LoseGame(); }
             }
+        }
+
+        private void LoseGame()
+        {
+            System.Windows.MessageBox.Show("YOU LOSE THE GAME, BITCH.");
         }
 
         

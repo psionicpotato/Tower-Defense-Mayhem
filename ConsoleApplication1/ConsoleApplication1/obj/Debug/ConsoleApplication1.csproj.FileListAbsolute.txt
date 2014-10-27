@@ -1,0 +1,6 @@
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
