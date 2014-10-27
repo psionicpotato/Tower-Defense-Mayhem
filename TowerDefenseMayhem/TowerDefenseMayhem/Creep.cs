@@ -20,7 +20,8 @@ namespace TowerDefenseMayhem
         public List<Creep> AllCreeps = new List<Creep>();
         public void Update(TimeSpan timeSpan)
         {
-            foreach (Creep creep in AllCreeps)
+            List<Creep> tempAllCreeps = new List<Creep>(AllCreeps);
+            foreach (Creep creep in tempAllCreeps)
             {
                 if (creep.IsAlive())
                 { /* alive = move */
@@ -31,6 +32,14 @@ namespace TowerDefenseMayhem
                     AllCreeps.Remove(creep);
                 }
             }
+        }
+    }
+
+    static class Extensions
+    {
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T: ICloneable
+        {
+            return listToClone.Select(item => (T)item.Clone()).ToList();
         }
     }
 
@@ -100,7 +109,13 @@ namespace TowerDefenseMayhem
         public void Move(TimeSpan timeSpan)
         {
             // determine destination
-            int[] nextPoint = {Path[LegOfPath + 1, 0], Path[LegOfPath + 1, 1]};
+            int[] nextPoint = {0,0};
+            if (LegOfPath < Path.GetLength(0))
+            {
+                nextPoint[0] = Path[LegOfPath + 1, 0];
+                nextPoint[1] = Path[LegOfPath + 1, 1];
+            }
+
             int[] distToNextPoint = {nextPoint[0] - PosX, nextPoint[1] - PosY};
             
             //TODO: there is deffinately a smarter way to do this
@@ -146,6 +161,7 @@ namespace TowerDefenseMayhem
                 {
                     distRemaining = Math.Abs(distToNextPoint[1]);
                 }
+
                 double timeTaken_ms = distRemaining / Speed;
                 PosX = nextPoint[0];
                 PosY = nextPoint[1];
@@ -172,10 +188,12 @@ namespace TowerDefenseMayhem
                 }
 
                 // check if final destination reached
-                if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(1) - 1, 1])
+                if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(0) - 1, 1])
+                // if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(1) - 1, 1])
                 {
                     // die and take players life point
                     MyCanvas.Dispatcher.Invoke(Die);
+                    MainWindow.LoseLives(1);
                 }
                 else
                 {
