@@ -16,8 +16,12 @@ namespace TowerDefenseMayhem
         public int PosX;
         public int PosY;
 
+        public int Range;
+        public int Damage;
+        public int SplashRange;
+
         public TowerType MyTowerType;
-        public enum TowerType { Basic, Flame, Radial }
+        public enum TowerType { Arrow, Flame, Radial, Bomb }
         public Weapon MyWeapon;
         public Creep TargetCreep;
 
@@ -46,7 +50,7 @@ namespace TowerDefenseMayhem
             //  to attack
             List<Creep> ans = new List<Creep>();
 
-            foreach (Creep c in creeps)
+            foreach (Creep c in allCreeps)
             {
                 double hypDistance = 
                     Math.Sqrt(Math.Pow(Math.Abs(c.PosX - this.PosX), 2) 
@@ -70,7 +74,7 @@ namespace TowerDefenseMayhem
         public void AcquireNextTarget(List<Creep> globalCreeps)
         {
             List<Creep> creepsInRange = new List<Creep>();
-            creepsInRange = FindCreepsInRange(globalCreeps);
+            //creepsInRange = FindCreepsInRange(globalCreeps);
             SetTargetNearest(creepsInRange);
         }
 

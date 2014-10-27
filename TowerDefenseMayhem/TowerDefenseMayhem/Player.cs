@@ -11,6 +11,11 @@ namespace TowerDefenseMayhem
 
         public int Lives { get; private set; }
         public event EventHandler LifeChange;
+
+        public Player()
+        {
+            Lives = 5;
+        }
         protected virtual void OnLifeChange()
         {
             if (LifeChange != null) { LifeChange(this, EventArgs.Empty); }
