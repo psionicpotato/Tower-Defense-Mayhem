@@ -42,6 +42,12 @@ namespace TowerDefenseMayhem
 
         public void StartNewGame(bool isFirstGame)
         {
+            NextLevel = 1;
+            if (!isFirstGame)
+            {
+                bw.Dispose();
+                bw2.Dispose();
+            }
             Pathing = new Pathing();
             Money = new Money();
             Level = new Level();
