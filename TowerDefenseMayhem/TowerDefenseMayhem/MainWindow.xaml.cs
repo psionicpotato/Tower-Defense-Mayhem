@@ -62,13 +62,16 @@ namespace TowerDefenseMayhem
             
         }
 
-        private BackgroundWorker bw = new BackgroundWorker();
-        private BackgroundWorker bw2 = new BackgroundWorker();
+        private BackgroundWorker bw;
+        private BackgroundWorker bw2;
 
         private void StartNextLevel()
         {
             ReadyForNextLevel = false;
             LevelOver = false;
+
+            bw = new BackgroundWorker();
+            bw2 = new BackgroundWorker();
 
             // Begin move creep worker
             bw2.WorkerReportsProgress = true;
@@ -155,6 +158,15 @@ namespace TowerDefenseMayhem
             ReadyForNextLevel = true;
             System.Windows.MessageBox.Show("done");
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A)
+            {
+                // instantiate tower here
+                
+            }
+        }
        
         private void StartNextLevel_Click(object sender, EventArgs e)
         {
@@ -185,7 +197,6 @@ namespace TowerDefenseMayhem
                 StartNewGame(false);
             }
         }
-
         
         private void DebugMoney_Click(object sender, RoutedEventArgs e)
         {
@@ -258,7 +269,6 @@ namespace TowerDefenseMayhem
                 mainPanelBorder.Margin = new Thickness();
             }
         }
-
     }
 
 
