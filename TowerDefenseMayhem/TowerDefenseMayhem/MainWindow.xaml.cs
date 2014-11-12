@@ -62,11 +62,15 @@ namespace TowerDefenseMayhem
             
         }
 
-        private BackgroundWorker bw = new BackgroundWorker();
-        private BackgroundWorker bw2 = new BackgroundWorker();
+        private BackgroundWorker bw;
+        private BackgroundWorker bw2;
 
         private void StartNextLevel()
         {
+
+            bw = new BackgroundWorker();
+            bw2 = new BackgroundWorker();
+
             ReadyForNextLevel = false;
             LevelOver = false;
 

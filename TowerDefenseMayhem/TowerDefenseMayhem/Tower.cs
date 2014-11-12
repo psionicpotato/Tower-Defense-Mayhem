@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 ///<summary>
 ///Note: use Queue rather than List for creeps in a tower's range
@@ -24,15 +26,32 @@ namespace TowerDefenseMayhem
         public enum TowerType { Arrow, Flame, Radial, Bomb }
         public Weapon MyWeapon;
         public Creep TargetCreep;
+        public Canvas MyCanvas;
+        public BitmapSource MyBitmapSource;
+        public Image MyImage;
+        public MainWindow MainWindow;
 
         // Constructor
-        public Tower(TowerType myTowerType, int posX, int posY) 
+        public Tower(TowerType myTowerType, int posX, int posY, Canvas myCanvas, MainWindow mainWindow) 
         {
-            // read args
+            MainWindow = mainWindow;
+            MyCanvas = myCanvas;
             MyTowerType = myTowerType;
+
             PosX = posX;
             PosY = posY;
-            
+
+            Uri imguri = new Uri(@"..\..\Tower Images\tower.png", UriKind.Relative);
+            PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            MyBitmapSource = dec.Frames[0];
+            MyImage = new Image();
+            MyImage.Source = MyBitmapSource;
+
+            MyCanvas.Children.Add(MyImage);
+            MyImage.SetValue(Canvas.LeftProperty, posX);
+            MyImage.SetValue(Canvas.TopProperty, posY);
+
+
             // use case select based on towertype
 
                 // set sprite according to myTowerType
