@@ -101,18 +101,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BabyCreep.png" />
+    <Resource Include="Creep Images\BabyCreep.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Map 1.png">
+    <Resource Include="Map Images\Map 1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BabyCreep_Hurt.png" />
+    <Resource Include="Creep Images\BabyCreep_Hurt.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\imageedit_1_5013384539.png" />
+    <Resource Include="Creep Images\imageedit_1_5013384539.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Tower Images\tower.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
