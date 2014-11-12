@@ -41,16 +41,7 @@ namespace TowerDefenseMayhem
             PosX = posX;
             PosY = posY;
 
-            Uri imguri = new Uri(@"..\..\Tower Images\tower.png", UriKind.Relative);
-            PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            MyBitmapSource = dec.Frames[0];
-            MyImage = new Image();
-            MyImage.Source = MyBitmapSource;
-
-            MyCanvas.Children.Add(MyImage);
-            MyImage.SetValue(Canvas.LeftProperty, posX);
-            MyImage.SetValue(Canvas.TopProperty, posY);
-
+            MyCanvas.Dispatcher.Invoke(DrawTower);
 
             // use case select based on towertype
 
@@ -59,6 +50,18 @@ namespace TowerDefenseMayhem
                 // set initial weapon
 
             // instantiate at posX, posY
+        }
+
+        private void DrawTower()
+        {
+            Uri imguri = new Uri(@"..\..\Tower Images\tower.png", UriKind.Relative);
+            PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            MyBitmapSource = dec.Frames[0];
+            MyImage = new System.Windows.Controls.Image();
+            MyImage.Source = MyBitmapSource;
+            MyCanvas.Children.Add(MyImage);
+            MyImage.SetValue(Canvas.LeftProperty, (double) PosX);
+            MyImage.SetValue(Canvas.TopProperty, (double) PosY);
         }
 
         // change to dictionary instead? save the range already calculated and

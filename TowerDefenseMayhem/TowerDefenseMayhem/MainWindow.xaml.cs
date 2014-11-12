@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Timers;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace TowerDefenseMayhem
 {
@@ -29,6 +30,7 @@ namespace TowerDefenseMayhem
         private Creeps Creeps;
         private Level Level;
         private Player Player;
+        private List<Tower> Towers;
 
         private bool LevelOver = true;   
         private const double LoopTime = 20;
@@ -64,6 +66,7 @@ namespace TowerDefenseMayhem
             DisplayLives = 5;
             NextLevel = 1;
             ReadyForNextLevel = true;
+            Towers = new List<Tower>();
             
         }
 
@@ -172,12 +175,16 @@ namespace TowerDefenseMayhem
             System.Windows.MessageBox.Show("done");
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs eKey)
         {
-            if (e.Key == Key.A)
+            if (eKey.Key == Key.A)
             {
                 // instantiate tower here
-                
+                System.Drawing.Point pos = System.Windows.Forms.Cursor.Position;
+                Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y),this.TDMCanvas, this);
+                //Towers.Add(t);
+
+                System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
             }
         }
        
