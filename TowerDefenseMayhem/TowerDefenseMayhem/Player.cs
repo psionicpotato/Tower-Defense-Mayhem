@@ -37,7 +37,7 @@ namespace TowerDefenseMayhem
                 OnLifeChange();
 
                 if (Lives == 0) { return true; }
-                return true;
+                return false;
             }
         }
 
