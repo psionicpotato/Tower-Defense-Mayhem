@@ -64,6 +64,7 @@ namespace TowerDefenseMayhem
         public string RelImagePath;
 
         private MainWindow MainWindow;
+        //private Creeps Collection;
 
         // Constructor
         public Creep(CreepType type, int[,] path, Canvas myCanvas, MainWindow mainWindow)
@@ -193,11 +194,12 @@ namespace TowerDefenseMayhem
 
                 // check if final destination reached
                 if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(0) - 1, 1])
-                // if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(1) - 1, 1])
                 {
                     // die and take players life point
+                    HitPoints = 0;
                     MyCanvas.Dispatcher.Invoke(Die);
-                    MainWindow.Dispatcher.Invoke(MainWindow.LoseLife);
+                    MainWindow.Dispatcher.Invoke(MainWindow.LoseLife);                    
+                    return;
                 }
                 else
                 {
@@ -214,10 +216,10 @@ namespace TowerDefenseMayhem
             MyImage.SetValue(Canvas.TopProperty,
                 Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
         }
-
+        
         public void Die()
         {
-            MyImage = null;
+            MyCanvas.Children.Remove(MyImage);
         }
 
         public bool IsAlive()
