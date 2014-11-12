@@ -45,6 +45,9 @@ namespace TowerDefenseMayhem
 
     class Creep
     {
+
+        
+    
     	// Spacial params
         public int PosX; //pixels
         public int PosY; //pixels
@@ -82,12 +85,12 @@ namespace TowerDefenseMayhem
         		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 0.05;
-                    RelImagePath = @"..\..\Images\imageedit_1_5013384539.png";
+                    RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 0.2;
-                    RelImagePath = @"..\..\Images\SpeedyCreep.png";
+                    RelImagePath = @"..\..\Creep Images\SpeedyCreep.png";
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;

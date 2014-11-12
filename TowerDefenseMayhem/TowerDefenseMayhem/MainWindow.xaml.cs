@@ -33,6 +33,11 @@ namespace TowerDefenseMayhem
         private bool LevelOver = true;   
         private const double LoopTime = 20;
 
+
+        public int NumberOfCreeps
+        {
+            get { return Creeps.AllCreeps.Count(); }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -67,7 +72,11 @@ namespace TowerDefenseMayhem
 
         private void StartNextLevel()
         {
-
+            if (NumberOfCreeps != 0)
+            {
+                System.Windows.MessageBox.Show("Breh, you gotta finish this level first!");
+                return;
+            }
             bw = new BackgroundWorker();
             bw2 = new BackgroundWorker();
 
@@ -173,15 +182,8 @@ namespace TowerDefenseMayhem
         }
        
         private void StartNextLevel_Click(object sender, EventArgs e)
-        {
-            if (ReadyForNextLevel)
-            {
-                StartNextLevel();
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("Breh, you gotta finish this level first!");
-            }
+        {            
+            StartNextLevel();            
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
