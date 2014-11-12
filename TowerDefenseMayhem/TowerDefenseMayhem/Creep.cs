@@ -81,7 +81,7 @@ namespace TowerDefenseMayhem
         		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 0.05;
-                    RelImagePath = @"..\..\Images\BabyCreep.png";
+                    RelImagePath = @"..\..\Images\imageedit_1_5013384539.png";
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
