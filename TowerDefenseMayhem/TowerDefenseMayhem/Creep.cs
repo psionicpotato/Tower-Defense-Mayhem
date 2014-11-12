@@ -197,7 +197,7 @@ namespace TowerDefenseMayhem
                 {
                     // die and take players life point
                     MyCanvas.Dispatcher.Invoke(Die);
-                    MainWindow.ChangeLives(-1);
+                    MainWindow.Dispatcher.Invoke(MainWindow.LoseLife);
                 }
                 else
                 {

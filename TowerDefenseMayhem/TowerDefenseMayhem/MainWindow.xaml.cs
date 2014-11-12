@@ -191,17 +191,10 @@ namespace TowerDefenseMayhem
             Player.AddLives(5); ;
         }
 
-        public void ChangeLives(int lives)
+        public void LoseLife()
         {
-            if (lives > 0)
-            {
-                Player.AddLives(lives);
-            }
-            else
-            {
-                bool lose = Player.LoseLives(lives);
-                if (!lose) { LoseGame(); }
-            }
+            bool lose = Player.LoseLives(-1);
+            if (!lose) { LoseGame(); }
         }
 
         private void LoseGame()

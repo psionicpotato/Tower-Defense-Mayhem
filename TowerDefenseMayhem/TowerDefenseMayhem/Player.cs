@@ -27,7 +27,7 @@ namespace TowerDefenseMayhem
             OnLifeChange();
         }
 
-        object locker;
+        object locker = new object();
         public bool LoseLives(int amount)
         {
             lock(locker)
