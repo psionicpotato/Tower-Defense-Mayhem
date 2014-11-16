@@ -182,13 +182,15 @@ namespace TowerDefenseMayhem
         {
             if (eKey.Key == Key.A)
             {
-                // instantiate tower here
-                //System.Drawing.Point pos = System.Windows.Forms.Cursor.Position;
-                System.Windows.Point pos = Mouse.GetPosition(this.TDMCanvas);
-                Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y),this.TDMCanvas, this);
-                //Towers.Add(t);
-
-                System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
+                bool canIBuy = Money.RequestPurchase(200);
+                if (canIBuy)
+                {
+                    // instantiate tower here
+                    System.Windows.Point pos = Mouse.GetPosition(this.TDMCanvas);
+                    Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y), this.TDMCanvas, this);
+                    //Towers.Add(t);
+                    //System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
+                }
             }
         }
        
