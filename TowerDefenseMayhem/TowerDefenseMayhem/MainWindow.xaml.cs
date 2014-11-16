@@ -94,6 +94,8 @@ namespace TowerDefenseMayhem
 
             bw2.DoWork += new DoWorkEventHandler(bw_SpawnCreeps);
             bw.DoWork += new DoWorkEventHandler(bw_MoveCreeps);
+            
+
 
             bw2.RunWorkerAsync();
             bw.RunWorkerAsync();
@@ -120,6 +122,7 @@ namespace TowerDefenseMayhem
                 }
             }
         }
+        
 
         private void bw_MoveCreeps(object sender, DoWorkEventArgs e)
         {
@@ -180,7 +183,8 @@ namespace TowerDefenseMayhem
             if (eKey.Key == Key.A)
             {
                 // instantiate tower here
-                System.Drawing.Point pos = System.Windows.Forms.Cursor.Position;
+                //System.Drawing.Point pos = System.Windows.Forms.Cursor.Position;
+                System.Windows.Point pos = Mouse.GetPosition(this.TDMCanvas);
                 Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y),this.TDMCanvas, this);
                 //Towers.Add(t);
 

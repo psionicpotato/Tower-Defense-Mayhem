@@ -63,7 +63,7 @@ namespace TowerDefenseMayhem
         // display params
         public Canvas MyCanvas;
         public BitmapSource MyBitmapSource;
-        public Image MyImage;
+        public System.Windows.Controls.Image MyImage;
         public string RelImagePath;
 
         private MainWindow MainWindow;
@@ -106,7 +106,7 @@ namespace TowerDefenseMayhem
             Uri imguri = new Uri(RelImagePath, UriKind.Relative);
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
             MyBitmapSource = dec.Frames[0];
-            MyImage = new Image();
+            MyImage = new System.Windows.Controls.Image();
             MyImage.Source = MyBitmapSource;
 
             MyCanvas.Children.Add(MyImage);

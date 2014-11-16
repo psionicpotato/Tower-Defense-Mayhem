@@ -33,7 +33,7 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" Background="Gray"></StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="3" Background="LightBlue" Grid.RowSpan="2"></StackPanel>
-        <Canvas x:Name="TDMCanvas" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2">
+        <Canvas x:Name="TDMCanvas" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Cursor="Cross">
             <Canvas.Background>
                 <ImageBrush ImageSource="Map Images\Map 1.png"></ImageBrush>
             </Canvas.Background>
