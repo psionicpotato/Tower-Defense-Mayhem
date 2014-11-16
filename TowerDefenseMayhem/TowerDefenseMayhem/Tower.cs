@@ -41,27 +41,53 @@ namespace TowerDefenseMayhem
             PosX = posX;
             PosY = posY;
 
-            MyCanvas.Dispatcher.Invoke(DrawTower);
-
+            string uriPath;
             // use case select based on towertype
+            switch (myTowerType)
+            {
+                case TowerType.Arrow:
+                    // need to add new image and update path
+                    uriPath = @"..\..\Tower Images\tower.png"; 
 
-                // set sprite according to myTowerType
+                    // set initial weapon
+                    MyWeapon = new Weapon(100, 100, 2);
 
-                // set initial weapon
+                    break;
+                case TowerType.Flame:
+                    // need to add new image and update path
+                    uriPath = @"..\..\Tower Images\tower.png"; 
+
+                    // set initial weapon
+                    MyWeapon = new Weapon(10, 100, 1);
+
+                    break;
+                case TowerType.Radial:
+                    // need to add new image and update path
+                    uriPath = @"..\..\Tower Images\tower.png";
+
+                    // set initial weapon
+
+                    break;
+                default:
+                    uriPath = "";
+                    break;
+            }
 
             // instantiate at posX, posY
+            MyCanvas.Dispatcher.Invoke(new Action(() => DrawTower(uriPath)));
+
         }
 
-        private void DrawTower()
+        private void DrawTower(string uriPath)
         {
-            Uri imguri = new Uri(@"..\..\Tower Images\tower.png", UriKind.Relative);
+            Uri imguri = new Uri(uriPath, UriKind.Relative);
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
             MyBitmapSource = dec.Frames[0];
             MyImage = new System.Windows.Controls.Image();
             MyImage.Source = MyBitmapSource;
             MyCanvas.Children.Add(MyImage);
-            MyImage.SetValue(Canvas.LeftProperty, (double) PosX);
-            MyImage.SetValue(Canvas.TopProperty, (double) PosY);
+            MyImage.SetValue(Canvas.LeftProperty, (double) PosX - Math.Floor(MyBitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty, (double) PosY - Math.Floor(MyBitmapSource.Height / 2));
         }
 
         // change to dictionary instead? save the range already calculated and
