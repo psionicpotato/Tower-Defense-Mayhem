@@ -95,8 +95,6 @@ namespace TowerDefenseMayhem
             bw2.DoWork += new DoWorkEventHandler(bw_SpawnCreeps);
             bw.DoWork += new DoWorkEventHandler(bw_MoveCreeps);
             
-
-
             bw2.RunWorkerAsync();
             bw.RunWorkerAsync();
         }
@@ -180,18 +178,43 @@ namespace TowerDefenseMayhem
 
         private void Window_KeyDown(object sender, KeyEventArgs eKey)
         {
-            if (eKey.Key == Key.A)
+            System.Windows.Point pos = Mouse.GetPosition(this.TDMCanvas);
+
+            if (eKey.Key == Key.F3)
             {
-                bool canIBuy = Money.RequestPurchase(200);
-                if (canIBuy)
+                Money.AddMoney(1000);
+            }
+            else if (eKey.Key == Key.F4)
+            {
+                Player.AddLives(5);
+            }
+
+            else if (eKey.Key == Key.A)
+            {                             
+                if (CheckIfLegalLocation(pos, Tower.TowerType.Arrow))
                 {
+                    if (Money.RequestPurchase(200))
+                    {
+                        Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y), this.TDMCanvas, this);
+                        Towers.Add(t);
+                        //System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
+                    }
                     // instantiate tower here
-                    System.Windows.Point pos = Mouse.GetPosition(this.TDMCanvas);
-                    Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y), this.TDMCanvas, this);
-                    //Towers.Add(t);
-                    //System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
+                    
+                    
                 }
             }
+        }
+
+        private bool CheckIfLegalLocation(System.Windows.Point position, Tower.TowerType tower)
+        {
+            if (position.X < 25 || position.X > 775 || position.Y < 25 || position.X > 775)
+            {
+                return false;
+            }
+
+
+            return true;
         }
        
         private void StartNextLevel_Click(object sender, EventArgs e)

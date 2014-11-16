@@ -31,8 +31,8 @@
             <TextBlock Width="100" FontSize="20" Margin ="5, 20, 0, 0 " Text="{Binding Path=DisplayLives, UpdateSourceTrigger=PropertyChanged}" />
             <Button Name="myButton" Content="Start Next Level" Width="90" Height="23" Margin="55,25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="StartNextLevel_Click" />            
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="2" Background="Gray"></StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3" Background="LightBlue" Grid.RowSpan="2"></StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2" Background="Blue"></StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="3" Background="DarkBlue" Grid.RowSpan="2"></StackPanel>
         <Canvas x:Name="TDMCanvas" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Cursor="Cross">
             <Canvas.Background>
                 <ImageBrush ImageSource="Map Images\Map 1.png"></ImageBrush>
