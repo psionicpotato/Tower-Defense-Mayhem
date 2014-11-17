@@ -74,6 +74,8 @@ namespace TowerDefenseMayhem
         private BackgroundWorker bw2;
         private BackgroundWorker bw3;
 
+        public Object towerLock = new Object();
+
         private void StartNextLevel()
         {
             if (NumberOfCreeps != 0)
@@ -117,9 +119,13 @@ namespace TowerDefenseMayhem
                 // towers scan
                 while (!LevelOver)
                 {
-                    foreach (Tower t in AllTowers)
+                    List<Tower> tempAllTowers = new List<Tower>(AllTowers);
+                    foreach (Tower t in tempAllTowers)
                     {
-                        t.Scan(TimeSpan.FromMilliseconds(LoopTime));
+                        lock (towerLock)
+                        {
+                            t.Scan(TimeSpan.FromMilliseconds(LoopTime));
+                        }
                     }
                 }
             }
@@ -160,8 +166,11 @@ namespace TowerDefenseMayhem
                 // perform loop through each existing creep
                 while (!LevelOver)
                 {
-                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(LoopTime));
-                    Creeps.Update(TimeSpan.FromMilliseconds(LoopTime));
+                    lock (towerLock)
+                    {
+                        System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(LoopTime));
+                        Creeps.Update(TimeSpan.FromMilliseconds(LoopTime));
+                    }
                 }
                 LevelOver = true;
                 ReadyForNextLevel = true;
