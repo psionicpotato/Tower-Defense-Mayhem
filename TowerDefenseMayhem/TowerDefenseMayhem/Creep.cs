@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 ///</summary>
 namespace TowerDefenseMayhem
 {
-    class Creeps
+    public class Creeps
     {
         public List<Creep> AllCreeps = new List<Creep>();
         public void Update(TimeSpan timeSpan)
@@ -35,6 +35,8 @@ namespace TowerDefenseMayhem
         }
     }
 
+    
+
     static class Extensions
     {
         public static IList<T> Clone<T>(this IList<T> listToClone) where T: ICloneable
@@ -43,7 +45,7 @@ namespace TowerDefenseMayhem
         }
     }
 
-    class Creep
+    public class Creep
     {
 
         
