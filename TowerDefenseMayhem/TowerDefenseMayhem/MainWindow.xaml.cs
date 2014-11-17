@@ -27,10 +27,10 @@ namespace TowerDefenseMayhem
         private bool ReadyForNextLevel;
         private Pathing Pathing;
         private Money Money;
-        private Creeps Creeps;
+        public Creeps Creeps;
         private Level Level;
         private Player Player;
-        private List<Tower> Towers;
+        private List<Tower> AllTowers;
 
         private bool LevelOver = true;   
         private const double LoopTime = 20;
@@ -66,12 +66,13 @@ namespace TowerDefenseMayhem
             DisplayLives = 5;
             NextLevel = 1;
             ReadyForNextLevel = true;
-            Towers = new List<Tower>();
+            AllTowers = new List<Tower>();
             
         }
 
         private BackgroundWorker bw;
         private BackgroundWorker bw2;
+        private BackgroundWorker bw3;
 
         private void StartNextLevel()
         {
@@ -82,21 +83,43 @@ namespace TowerDefenseMayhem
             }
             bw = new BackgroundWorker();
             bw2 = new BackgroundWorker();
+            bw3 = new BackgroundWorker();
 
             ReadyForNextLevel = false;
             LevelOver = false;
 
             bw = new BackgroundWorker();
             bw2 = new BackgroundWorker();
+            bw3 = new BackgroundWorker();
 
-            // Begin move creep worker
             bw2.WorkerReportsProgress = true;
+            bw3.WorkerReportsProgress = true;
 
+            bw3.DoWork += new DoWorkEventHandler(bw_TowersScan);
             bw2.DoWork += new DoWorkEventHandler(bw_SpawnCreeps);
             bw.DoWork += new DoWorkEventHandler(bw_MoveCreeps);
-            
+
+            bw3.RunWorkerAsync();
             bw2.RunWorkerAsync();
             bw.RunWorkerAsync();
+        }
+
+        private void bw_TowersScan(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            if ((worker.CancellationPending == true))
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                // towers scan
+                foreach (Tower t in AllTowers)
+                {
+                    t.Scan(TimeSpan.FromMilliseconds(LoopTime));
+                }
+            }
         }
 
         private void bw_SpawnCreeps(object sender, DoWorkEventArgs e)
@@ -120,7 +143,6 @@ namespace TowerDefenseMayhem
                 }
             }
         }
-        
 
         private void bw_MoveCreeps(object sender, DoWorkEventArgs e)
         {
@@ -196,7 +218,7 @@ namespace TowerDefenseMayhem
                     if (Money.RequestPurchase(200))
                     {
                         Tower t = new Tower(Tower.TowerType.Arrow, Convert.ToInt16(pos.X), Convert.ToInt16(pos.Y), this.TDMCanvas, this);
-                        Towers.Add(t);
+                        AllTowers.Add(t);
                         //System.Windows.MessageBox.Show(pos.X + ", " + pos.Y);
                     }
                     // instantiate tower here
@@ -228,7 +250,7 @@ namespace TowerDefenseMayhem
             }
 
 
-            foreach (Tower t in Towers)
+            foreach (Tower t in AllTowers)
             {
                 if ((Math.Abs(position.X - t.PosX) < 50) && (Math.Abs(position.Y - t.PosY) < 50))
                 {
