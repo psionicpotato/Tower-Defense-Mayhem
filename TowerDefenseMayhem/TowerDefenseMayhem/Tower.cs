@@ -94,20 +94,19 @@ namespace TowerDefenseMayhem
         //  pass it on to SetTargetNearest?        
         private List<Creep> CreepsInRange(List<Creep> allCreeps)
         {
+            // create temp instance of list
+            List<Creep> tempAllCreeps = new List<Creep>(allCreeps);
+
             // loop through creeps, create collection of those close enough
             //  to attack
             List<Creep> ans = new List<Creep>();
 
-            foreach (Creep c in allCreeps)
+            foreach (Creep c in tempAllCreeps)
             {
                 double hypDistance = GetDistanceToCreep(c);
                 if (hypDistance <= MyWeapon.Range) 
                 { /* in range */
                     ans.Add(c);
-                }
-                else
-                { /* out of range */
-                    ans.Remove(c);
                 }
             }
 
@@ -115,38 +114,46 @@ namespace TowerDefenseMayhem
         }
 
         // maybe include in FindCreepsInRange for now, easy enough to do
-        private void SetTargetNearest(List<Creep> creepsInRange)
+        private Creep GetTargetNearest(List<Creep> creepsInRange)
         {
             // loop through creep collection positions and find nearest one
             foreach (Creep c in creepsInRange)
             {
                 if (TargetCreep == null)
                 { /* acquire new target */
-                    TargetCreep = c;
+                    return c;
                 }
                 else
                 { /* check for closer target */
                     if (GetDistanceToCreep(c) < GetDistanceToCreep(TargetCreep))
                     { /* switch to closer target */
-                        TargetCreep = c;
+                        return c;
                     }
                 }
             }
+            return null;
         }
 
         private double GetDistanceToCreep(Creep c)
         {
-            return Math.Sqrt(Math.Pow(Math.Abs(c.PosX - this.PosX), 2)
-                        + Math.Abs(c.PosY - this.PosY));
+            if (c != null)
+            {
+                return Math.Sqrt(Math.Pow(Math.Abs(c.PosX - this.PosX), 2)
+                        + Math.Pow(Math.Abs(c.PosY - this.PosY), 2));
+            }
+            else
+            {
+                return 0;
+            }
         }
 
-        // call this after current target leaves range or dies
-        private void AcquireNextTarget(List<Creep> globalCreeps)
-        {
-            List<Creep> creepsInRange = new List<Creep>();
-            //creepsInRange = FindCreepsInRange(globalCreeps);
-            SetTargetNearest(creepsInRange);
-        }
+        //// call this after current target leaves range or dies
+        //private Creep GetNextTarget(List<Creep> globalCreeps)
+        //{
+        //    List<Creep> creepsInRange = new List<Creep>();
+        //    ////creepsInRange = FindCreepsInRange(globalCreeps);
+        //    return GetTargetNearest(creepsInRange);
+        //}
 
         private void AttackCreep(Creep _creep)
         {
@@ -158,6 +165,12 @@ namespace TowerDefenseMayhem
             {
                 // attack!
                 _creep.HitPoints -= MyWeapon.Damage;
+
+                // check for kill condition
+                if (_creep.HitPoints <= 0)
+                {
+                    MyCanvas.Dispatcher.Invoke(_creep.Die);
+                }
 
                 // trigger cooldown state
                 MyWeapon.CooldownCurrent = MyWeapon.CooldownMax;
@@ -185,12 +198,28 @@ namespace TowerDefenseMayhem
         public void Scan(TimeSpan timeSpan)
         {
             // generate "creeps in range" list and acquire target
-            AcquireNextTarget(CreepsInRange(MainWindow.Creeps.AllCreeps));
-
-            // attack target if "cooled down"
-            if (MyWeapon.CooldownCurrent == 0)
+            List<Creep> creepsInRange = CreepsInRange(MainWindow.Creeps.AllCreeps);
+            if (creepsInRange.Count > 0)
             {
-                AttackCreep(TargetCreep);
+                TargetCreep = GetTargetNearest(creepsInRange);
+            }
+
+            if (TargetCreep != null)
+            {
+                // attack target if "cooled down"
+                if (MyWeapon.CooldownCurrent == 0)
+                {
+                    AttackCreep(TargetCreep);
+                }
+            }
+
+            if (MyWeapon.CooldownCurrent >= 10)
+            {
+                MyWeapon.CooldownCurrent -= 10;
+            }
+            else
+            {
+                MyWeapon.CooldownCurrent = 0;
             }
         }
     }

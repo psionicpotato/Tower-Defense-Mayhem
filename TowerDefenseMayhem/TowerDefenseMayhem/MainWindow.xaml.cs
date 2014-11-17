@@ -108,16 +108,19 @@ namespace TowerDefenseMayhem
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            if ((worker.CancellationPending == true))
+            if ((worker.CancellationPending))
             {
                 e.Cancel = true;
             }
             else
             {
                 // towers scan
-                foreach (Tower t in AllTowers)
+                while (!LevelOver)
                 {
-                    t.Scan(TimeSpan.FromMilliseconds(LoopTime));
+                    foreach (Tower t in AllTowers)
+                    {
+                        t.Scan(TimeSpan.FromMilliseconds(LoopTime));
+                    }
                 }
             }
         }
