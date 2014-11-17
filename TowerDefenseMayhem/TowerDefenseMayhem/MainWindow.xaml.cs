@@ -191,7 +191,7 @@ namespace TowerDefenseMayhem
 
             else if (eKey.Key == Key.A)
             {                             
-                if (CheckIfLegalLocation(pos, Tower.TowerType.Arrow))
+                if (CheckIfLegalLocation(pos))
                 {
                     if (Money.RequestPurchase(200))
                     {
@@ -206,13 +206,35 @@ namespace TowerDefenseMayhem
             }
         }
 
-        private bool CheckIfLegalLocation(System.Windows.Point position, Tower.TowerType tower)
+        private bool CheckIfLegalLocation(System.Windows.Point position)
         {
+            
+
             if (position.X < 25 || position.X > 775 || position.Y < 25 || position.X > 775)
             {
                 return false;
             }
+            else if (position.X < 638 && position.Y < 238 && position.Y > 162)
+            {
+                return false;
+            }
+            else if (position.X < 638 && position.X > 562 && position.Y > 162 && position.Y < 638)
+            {
+                return false;
+            }
+            else if (position.X < 638 && position.Y < 638 && position.Y > 562)
+            {
+                return false;
+            }
 
+
+            foreach (Tower t in Towers)
+            {
+                if ((Math.Abs(position.X - t.PosX) < 50) && (Math.Abs(position.Y - t.PosY) < 50))
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
