@@ -27,7 +27,7 @@ namespace TowerDefenseMayhem
         private bool ReadyForNextLevel;
         private Pathing Pathing;
         private Money Money;
-        public Creeps Creeps;
+        public Creeps myCreeps;
         private Level Level;
         private Player Player;
         private List<Tower> AllTowers;
@@ -38,7 +38,7 @@ namespace TowerDefenseMayhem
 
         public int NumberOfCreeps
         {
-            get { return Creeps.AllCreeps.Count(); }
+            get { return myCreeps.AllCreeps.Count(); }
         }
         public MainWindow()
         {
@@ -58,7 +58,7 @@ namespace TowerDefenseMayhem
             Pathing = new Pathing();
             Money = new Money();
             Level = new Level();
-            Creeps = new Creeps();
+            myCreeps = new Creeps();
             Player = new Player();
             Money.CashChange += Source_CashChange;
             Player.LifeChange += Source_LifeChange;
@@ -67,6 +67,34 @@ namespace TowerDefenseMayhem
             NextLevel = 1;
             ReadyForNextLevel = true;
             AllTowers = new List<Tower>();
+
+            // Listener for change money
+            myCreeps.CreepDied += myCreeps_CreepDied;
+        }
+
+        void myCreeps_CreepDied(object creepToRemove, EventArgs e)
+        {
+            Creep c = (Creep)creepToRemove;
+            myCreeps.AllCreeps.Remove(c);
+            //System.Diagnostics.Debug.Print("Creep has died, " + myCreeps.AllCreeps.Count + " remaining creeps.");
+            
+            if (c.WasKilled)
+            {
+                Money_ChangeUserMoney(c.Bounty);                                
+            }
+        }
+        
+        public void Money_ChangeUserMoney(int money)
+        {            
+            if (money < 0)
+            {                
+                bool success;
+                Dispatcher.Invoke(new Action(() => success = Money.RequestPurchase(money)));
+            }
+            else
+            {
+                Dispatcher.Invoke(new Action(() => Money.AddMoney(money)));
+            }
             
         }
 
@@ -146,7 +174,7 @@ namespace TowerDefenseMayhem
                 {
                     double spawnPeriod = 5;// seconds
                     Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas, this);
-                    Creeps.AllCreeps.Add(newCreep);
+                    myCreeps.AllCreeps.Add(newCreep);
 
                     System.Threading.Thread.Sleep(TimeSpan.FromSeconds(spawnPeriod));
                 }
@@ -169,7 +197,7 @@ namespace TowerDefenseMayhem
                     lock (towerLock)
                     {
                         System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(LoopTime));
-                        Creeps.Update(TimeSpan.FromMilliseconds(LoopTime));
+                        myCreeps.Update(TimeSpan.FromMilliseconds(LoopTime));
                     }
                 }
                 LevelOver = true;
@@ -199,7 +227,7 @@ namespace TowerDefenseMayhem
                         Thread.Sleep(leftoverTime);
                     }                    
                 }
-                if (Creeps.AllCreeps.Count() == 0 && waitEightSeconds > 80)
+                if (myCreeps.AllCreeps.Count() == 0 && waitEightSeconds > 80)
                 {
                     break;
                 }

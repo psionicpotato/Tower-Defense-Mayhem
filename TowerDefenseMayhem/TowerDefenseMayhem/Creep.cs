@@ -29,13 +29,15 @@ namespace TowerDefenseMayhem
                 }
                 else
                 { /* dead */
-                    AllCreeps.Remove(creep);
+                    //AllCreeps.Remove(creep);
+                    // notify MainWindow
+                    CreepDied(creep, new EventArgs());
                 }
             }
         }
-    }
 
-    
+        public event EventHandler CreepDied;
+    }
 
     static class Extensions
     {
@@ -47,18 +49,20 @@ namespace TowerDefenseMayhem
 
     public class Creep
     {
+        // Event Handlers
+        public event EventHandler CreepDied;
 
-        
-    
     	// Spacial params
         public int PosX; //pixels
         public int PosY; //pixels
         public double Speed; //pixels per millisecond
         public int[,] Path; //pixel positions
         public int LegOfPath; //which leg of path it is currently on (index 0)
+        public bool WasKilled = false;
 
         // interaction params
         public double HitPoints;
+        public int Bounty;
         public CreepType Type;
         public enum CreepType { Baby, Speedy, Tanky }
 
@@ -69,7 +73,6 @@ namespace TowerDefenseMayhem
         public string RelImagePath;
 
         private MainWindow MainWindow;
-        //private Creeps Collection;
 
         // Constructor
         public Creep(CreepType type, int[,] path, Canvas myCanvas, MainWindow mainWindow)
@@ -88,16 +91,19 @@ namespace TowerDefenseMayhem
         			HitPoints = 5;
         			Speed = 0.05;
                     RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    Bounty = 20;
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 0.2;
                     RelImagePath = @"..\..\Creep Images\SpeedyCreep.png";
+                    Bounty = 30;
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
         			Speed = 0.02;
-                    //RelImagePath = @"..\..\Images\TankyCreep.png";
+                    RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    Bounty = 100;
         			break;
         	}
             MyCanvas.Dispatcher.Invoke(SetImageFromPath);
@@ -200,9 +206,10 @@ namespace TowerDefenseMayhem
                 // check if final destination reached
                 if (PosX == Path[Path.GetLength(0) - 1, 0] && PosY == Path[Path.GetLength(0) - 1, 1])
                 {
-                    // die and take players life point
+                    // expire and take players life point
                     HitPoints = 0;
-                    MyCanvas.Dispatcher.Invoke(Die);
+                    //REFACTOR: from Die to Expire
+                    MyCanvas.Dispatcher.Invoke(Expire);
                     MainWindow.Dispatcher.Invoke(MainWindow.LoseLife);                    
                     return;
                 }
@@ -221,10 +228,20 @@ namespace TowerDefenseMayhem
             MyImage.SetValue(Canvas.TopProperty,
                 Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
         }
-        
-        public void Die()
+
+        public void Expire()
         {
             MyCanvas.Children.Remove(MyImage);
+        }
+        
+        public void Killed()
+        {
+            // give player bounty money
+            // use Event
+            MyCanvas.Children.Remove(MyImage);
+            //MyCanvas.Dispatcher.Invoke(new Action(() => MainWindow.ChangeUserMoney(Bounty)));
+            //MyCanvas.Children.Remove(MyImage);
+            WasKilled = true;
         }
 
         public bool IsAlive()

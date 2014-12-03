@@ -94,6 +94,7 @@ namespace TowerDefenseMayhem
         //  pass it on to SetTargetNearest?        
         private List<Creep> CreepsInRange(List<Creep> allCreeps)
         {
+            //System.Diagnostics.Debug.Print("Passin in " + allCreeps.Count + "creeps to CreepsInRange.");
             // create temp instance of list
             List<Creep> tempAllCreeps = new List<Creep>(allCreeps);
 
@@ -105,8 +106,9 @@ namespace TowerDefenseMayhem
             {
                 double hypDistance = GetDistanceToCreep(c);
                 if (hypDistance <= MyWeapon.Range) 
-                { /* in range */
+                { /* in range */                    
                     ans.Add(c);
+                    //System.Diagnostics.Debug.Print("Creeps in range of tower: " + ans.Count);
                 }
             }
 
@@ -169,7 +171,8 @@ namespace TowerDefenseMayhem
                 // check for kill condition
                 if (_creep.HitPoints <= 0)
                 {
-                    MyCanvas.Dispatcher.Invoke(_creep.Die);
+                    //System.Diagnostics.Debug.Print("Creep hitpoints: " + _creep.HitPoints);
+                    MyCanvas.Dispatcher.Invoke(_creep.Killed);
                 }
 
                 // trigger cooldown state
@@ -198,20 +201,27 @@ namespace TowerDefenseMayhem
         public void Scan(TimeSpan timeSpan)
         {
             // generate "creeps in range" list and acquire target
-            List<Creep> creepsInRange = CreepsInRange(MainWindow.Creeps.AllCreeps);
+            List<Creep> creepsInRange = CreepsInRange(MainWindow.myCreeps.AllCreeps);
+            //System.Diagnostics.Debug.Print("Creeps in Range are: " + creepsInRange.Count);
             if (creepsInRange.Count > 0)
             {
                 TargetCreep = GetTargetNearest(creepsInRange);
-            }
 
-            if (TargetCreep != null)
-            {
                 // attack target if "cooled down"
-                if (MyWeapon.CooldownCurrent == 0)
+                if (TargetCreep != null && MyWeapon.CooldownCurrent == 0)
                 {
                     AttackCreep(TargetCreep);
                 }
             }
+
+            //if (TargetCreep != null)
+            //{
+            //    //attack target if "cooled down"
+            //    if (MyWeapon.CooldownCurrent == 0)
+            //    {
+            //        AttackCreep(TargetCreep);
+            //    }
+            //}
 
             if (MyWeapon.CooldownCurrent >= 10)
             {
