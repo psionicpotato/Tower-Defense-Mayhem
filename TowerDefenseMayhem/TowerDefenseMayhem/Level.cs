@@ -8,16 +8,72 @@ namespace TowerDefenseMayhem
 {
     class Level
     {
-        public int GetCreepCount(int level)
+        private int CurrentLevel;
+
+        private const int NumberOfCreeps = 3;
+        public Level()
         {
-            switch (level)
+            CurrentLevel = 1;
+        }
+
+
+        public int[][] GetNextLevel(out int Level)
+        {
+            //Format:
+            //CreepsForLevel[BABY] = new int[] { number, time interval };
+            //CreepsForLevel[SPEEDY] = new int[] { number, time interval };
+            //CreepsForLevel[TANKY] = new int[] { number, time interval };
+            Level = CurrentLevel;
+            CurrentLevel++;
+
+            int[][] CreepsForLevel = new int[NumberOfCreeps][];
+
+            switch (Level)
             {
                 case 1:
-                    return 5;
+                    CreepsForLevel[0] = new int[] { 5, 3 };
+                    CreepsForLevel[1] = new int[] { 0, 0 };
+                    CreepsForLevel[2] = new int[] { 0, 0 };
+                    break;
                 case 2:
-                    return 10;
+                    CreepsForLevel[0] = new int[] { 10, 2 };
+                    CreepsForLevel[1] = new int[] { 0, 0 };
+                    CreepsForLevel[2] = new int[] { 0, 0 };
+                    break;
                 case 3:
-                    return 15;
+                    CreepsForLevel[0] = new int[] { 0, 0 };
+                    CreepsForLevel[1] = new int[] { 5, 2 };
+                    CreepsForLevel[2] = new int[] { 0, 0 };
+                    break;
+                case 4:
+                    CreepsForLevel[0] = new int[] { 0, 0 };
+                    CreepsForLevel[1] = new int[] { 0, 0 };
+                    CreepsForLevel[2] = new int[] { 5, 2 };
+                    break;
+                case 5:
+                    CreepsForLevel[0] = new int[] { 2, 1 };
+                    CreepsForLevel[1] = new int[] { 2, 2 };
+                    CreepsForLevel[2] = new int[] { 2, 3 };
+                    break;
+                default:
+                    CreepsForLevel[0] = new int[] { 5, 2 };
+                    CreepsForLevel[1] = new int[] { 5, 3 };
+                    CreepsForLevel[2] = new int[] { 5, 3 };
+                    break;
+            }
+            return CreepsForLevel;
+        }
+
+
+        public int GetCreepCount(int level)
+        {
+            if (level < 10)
+            {
+                return level * 5;
+            }
+            if (level < 20)
+            {
+                return level * 10;
             }
             return 1000;
         }

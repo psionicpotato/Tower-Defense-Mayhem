@@ -31,6 +31,7 @@ namespace TowerDefenseMayhem
         private Level Level;
         private Player Player;
         private List<Tower> AllTowers;
+        private int CurrentLevel = 0;
 
         private bool LevelOver = true;   
         private const double LoopTime = 20;
@@ -159,9 +160,13 @@ namespace TowerDefenseMayhem
             }
         }
 
+        private event EventHandler SpawnCreepsEvent;
+
         private void bw_SpawnCreeps(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
+
+            
 
             if ((worker.CancellationPending == true))
             {
@@ -169,15 +174,60 @@ namespace TowerDefenseMayhem
             }
             else
             {
-                // spawn creeps
-                for (int i = 0; i < Level.GetCreepCount(NextLevel); i++)
-                {
-                    double spawnPeriod = 5;// seconds
-                    Creep newCreep = new Creep(Creep.CreepType.Baby, Pathing.GetPath(NextLevel), TDMCanvas, this);
-                    myCreeps.AllCreeps.Add(newCreep);
 
-                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(spawnPeriod));
+                int level;
+                int[][] creeps = Level.GetNextLevel(out level);
+                CurrentLevel = level;
+
+                //[creep type][0=#, 1= interval]
+
+                Thread[] threads = new Thread[creeps.Length];
+                for (int i = 0; i < creeps.Length; i++)
+                {                    
+                    if (creeps[i][0] != 0)
+                    {
+                        Creep.CreepType type;
+                        switch (i)
+                        {
+                            case 0:
+                                type = Creep.CreepType.Baby;
+                                break;
+                            case 1:
+                                type = Creep.CreepType.Speedy;
+                                break;
+                            case 2:
+                                type = Creep.CreepType.Tanky;
+                                break;
+                            default:
+                                type = Creep.CreepType.Baby;
+                                break;
+                        }
+                        if (i <= 2)
+                        {
+                            //SpawnCreepsEvent += SpawnCreeps(type, creeps[i]);
+                            //SpawnCreeps(type, creeps[i]) += SpawnCreepsEvent;
+                            threads[i] = new Thread(() => SpawnCreeps(type, creeps[i]));
+                            threads[i].Start();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        
+                    }                                        
                 }
+            }
+        }
+
+       
+
+        public void SpawnCreeps(Creep.CreepType type, int[] info)
+        {
+            for (int j = 0; j < info[0]; j++)
+            {
+                Creep newCreep = new Creep(type, Pathing.GetPath(NextLevel), TDMCanvas, this);
+                myCreeps.AllCreeps.Add(newCreep);
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(info[1]));
             }
         }
 
