@@ -28,3 +28,7 @@ C:\Users\vinh\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Deb
 C:\Users\vinh\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.exe
 C:\Users\vinh\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.pdb
 C:\Users\vinh\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.exe.manifest
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\bin\Debug\TowerDefenseMayhem.application
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.exe.manifest
+C:\Users\Daniel\Documents\GitHub\Tower-Defense-Mayhem\TowerDefenseMayhem\TowerDefenseMayhem\obj\Debug\TowerDefenseMayhem.application

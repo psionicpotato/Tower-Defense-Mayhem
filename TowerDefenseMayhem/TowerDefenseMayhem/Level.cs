@@ -31,34 +31,34 @@ namespace TowerDefenseMayhem
             switch (Level)
             {
                 case 1:
-                    CreepsForLevel[0] = new int[] { 5, 3 };
+                    CreepsForLevel[0] = new int[] { 5, 3000 };
                     CreepsForLevel[1] = new int[] { 0, 0 };
                     CreepsForLevel[2] = new int[] { 0, 0 };
                     break;
                 case 2:
-                    CreepsForLevel[0] = new int[] { 10, 2 };
+                    CreepsForLevel[0] = new int[] { 10, 2000 };
                     CreepsForLevel[1] = new int[] { 0, 0 };
                     CreepsForLevel[2] = new int[] { 0, 0 };
                     break;
                 case 3:
                     CreepsForLevel[0] = new int[] { 0, 0 };
-                    CreepsForLevel[1] = new int[] { 5, 2 };
+                    CreepsForLevel[1] = new int[] { 5, 2000 };
                     CreepsForLevel[2] = new int[] { 0, 0 };
                     break;
                 case 4:
                     CreepsForLevel[0] = new int[] { 0, 0 };
                     CreepsForLevel[1] = new int[] { 0, 0 };
-                    CreepsForLevel[2] = new int[] { 5, 2 };
+                    CreepsForLevel[2] = new int[] { 5, 2000 };
                     break;
                 case 5:
-                    CreepsForLevel[0] = new int[] { 2, 1 };
-                    CreepsForLevel[1] = new int[] { 2, 2 };
-                    CreepsForLevel[2] = new int[] { 2, 3 };
+                    CreepsForLevel[0] = new int[] { 2, 1000 };
+                    CreepsForLevel[1] = new int[] { 2, 2000 };
+                    CreepsForLevel[2] = new int[] { 2, 3000 };
                     break;
                 default:
-                    CreepsForLevel[0] = new int[] { 5, 2 };
-                    CreepsForLevel[1] = new int[] { 5, 3 };
-                    CreepsForLevel[2] = new int[] { 5, 3 };
+                    CreepsForLevel[0] = new int[] { 5, 2000 };
+                    CreepsForLevel[1] = new int[] { 5, 3000 };
+                    CreepsForLevel[2] = new int[] { 5, 3000 };
                     break;
             }
             return CreepsForLevel;

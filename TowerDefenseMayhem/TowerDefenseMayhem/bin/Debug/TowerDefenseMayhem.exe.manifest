@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TowerDefenseMayhem.exe" size="40872">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TowerDefenseMayhem.exe" size="41984">
       <assemblyIdentity name="TowerDefenseMayhem" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>zHHodaAn3F/t74IP0Nj4nHOYEg96gxUGsq2saMYOKtU=</dsig:DigestValue>
+        <dsig:DigestValue>AA/YqObFC5fodAv2CApQmPn6WpzlTU/yoIUO46XPzTE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
