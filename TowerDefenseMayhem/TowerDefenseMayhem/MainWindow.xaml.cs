@@ -160,6 +160,7 @@ namespace TowerDefenseMayhem
                             t.Scan(TimeSpan.FromMilliseconds(LoopTime));
                         }
                     }
+                    Thread.Sleep(TimeSpan.FromMilliseconds(LoopTime));
                 }
             }
         }
