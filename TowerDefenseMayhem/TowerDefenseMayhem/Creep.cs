@@ -112,10 +112,21 @@ namespace TowerDefenseMayhem
                     Bounty = 100;
         			break;
         	}
-            MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage)));
+            MyCanvas.Dispatcher.Invoke(new Action(() => SetImage(pathImage)));
         }
         
-        private void DrawCreep(string uriPath)
+        private void DrawCreep()
+        {            
+            MyImage.SetValue(Canvas.LeftProperty, (double)PosX - Math.Floor(MyBitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty, (double)PosY - Math.Floor(MyBitmapSource.Height / 2));
+        }
+
+        public void UndrawCreep()
+        {
+            MyCanvas.Children.Remove(MyImage);         
+        }
+
+        private void SetImage(string uriPath)
         {
             Uri imguri = new Uri(uriPath, UriKind.Relative);
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
@@ -123,8 +134,7 @@ namespace TowerDefenseMayhem
             MyImage = new System.Windows.Controls.Image();
             MyImage.Source = MyBitmapSource;
             MyCanvas.Children.Add(MyImage);
-            MyImage.SetValue(Canvas.LeftProperty, (double)PosX - Math.Floor(MyBitmapSource.Width / 2));
-            MyImage.SetValue(Canvas.TopProperty, (double)PosY - Math.Floor(MyBitmapSource.Height / 2));
+            DrawCreep();
         }
 
         public void Move(TimeSpan timeSpan)
@@ -228,22 +238,25 @@ namespace TowerDefenseMayhem
 
         public void UpdateImage()
         {
-            MyImage.SetValue(Canvas.LeftProperty,
-                Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
-            MyImage.SetValue(Canvas.TopProperty,
-                Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
+            if (IsAlive())
+            {
+                MyImage.SetValue(Canvas.LeftProperty,
+                    Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
+                MyImage.SetValue(Canvas.TopProperty,
+                    Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
+            }
         }
 
         public void Expire()
         {
-            MyCanvas.Children.Remove(MyImage);
+            MyCanvas.Dispatcher.Invoke(UndrawCreep);
         }
         
         public void Killed()
         {
             // give player bounty money
             // use Event
-            MyCanvas.Children.Remove(MyImage);
+            MyCanvas.Dispatcher.Invoke(UndrawCreep);
             //MyCanvas.Dispatcher.Invoke(new Action(() => MainWindow.ChangeUserMoney(Bounty)));
             //MyCanvas.Children.Remove(MyImage);
             WasKilled = true;
@@ -251,6 +264,7 @@ namespace TowerDefenseMayhem
 
         public void Hurt(double dmg)
         {
+            MyCanvas.Dispatcher.Invoke(UndrawCreep);
             // switch image to 'hurt'
             Thread t1 = new Thread(new ThreadStart(
             delegate()
@@ -258,18 +272,17 @@ namespace TowerDefenseMayhem
                 MyCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                     new Action(delegate()
                     {
-                        MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage_hurt)));
-
+                        MyCanvas.Dispatcher.Invoke(new Action(() => SetImage(pathImage_hurt)));
                     }));
-                Thread.Sleep(TimeSpan.FromMilliseconds(MainWindow.LoopTime));
+                Thread.Sleep(TimeSpan.FromMilliseconds(250.0));
+                MyCanvas.Dispatcher.Invoke(UndrawCreep);
                 MyCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                     new Action(delegate()
                     {
-                        MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage)));
+                        MyCanvas.Dispatcher.Invoke(new Action(() => SetImage(pathImage)));
                     }));
             }));
             t1.Start();
-
             HitPoints -= dmg;
         }
 
