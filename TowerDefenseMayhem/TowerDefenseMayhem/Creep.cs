@@ -7,6 +7,8 @@ using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Threading;
+using System.Windows.Threading;
 
 ///<summary>
 /// Notes: 
@@ -61,7 +63,7 @@ namespace TowerDefenseMayhem
         public bool WasKilled = false;
 
         // interaction params
-        public double HitPoints;
+        public double HitPoints { get; private set; }
         public int Bounty;
         public CreepType Type;
         public enum CreepType { Baby, Speedy, Tanky }
@@ -70,7 +72,8 @@ namespace TowerDefenseMayhem
         public Canvas MyCanvas;
         public BitmapSource MyBitmapSource;
         public System.Windows.Controls.Image MyImage;
-        public string RelImagePath;
+        private string pathImage;
+        private string pathImage_hurt;
 
         private MainWindow MainWindow;
 
@@ -90,36 +93,38 @@ namespace TowerDefenseMayhem
         		case CreepType.Baby:
         			HitPoints = 5;
         			Speed = 0.05;
-                    RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    pathImage = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    pathImage_hurt = @"..\..\Creep Images\BabyCreep_Hurt.png";
                     Bounty = 20;
         			break;
         		case CreepType.Speedy:
         			HitPoints = 5;
         			Speed = 0.2;
-                    RelImagePath = @"..\..\Creep Images\SpeedyCreep.png";
+                    pathImage = @"..\..\Creep Images\SpeedyCreep.png";
+                    pathImage_hurt = @"..\..\Creep Images\BabyCreep_Hurt.png";
                     Bounty = 30;
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
         			Speed = 0.05;
-                    RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    pathImage = @"..\..\Creep Images\imageedit_1_5013384539.png";
+                    pathImage_hurt = @"..\..\Creep Images\BabyCreep_Hurt.png";
                     Bounty = 100;
         			break;
         	}
-            MyCanvas.Dispatcher.Invoke(SetImageFromPath);
+            MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage)));
         }
-
-        private void SetImageFromPath()
+        
+        private void DrawCreep(string uriPath)
         {
-            Uri imguri = new Uri(RelImagePath, UriKind.Relative);
+            Uri imguri = new Uri(uriPath, UriKind.Relative);
             PngBitmapDecoder dec = new PngBitmapDecoder(imguri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
             MyBitmapSource = dec.Frames[0];
             MyImage = new System.Windows.Controls.Image();
             MyImage.Source = MyBitmapSource;
-
             MyCanvas.Children.Add(MyImage);
-            MyImage.SetValue(Canvas.LeftProperty, Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
-            MyImage.SetValue(Canvas.TopProperty, Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
+            MyImage.SetValue(Canvas.LeftProperty, (double)PosX - Math.Floor(MyBitmapSource.Width / 2));
+            MyImage.SetValue(Canvas.TopProperty, (double)PosY - Math.Floor(MyBitmapSource.Height / 2));
         }
 
         public void Move(TimeSpan timeSpan)
@@ -242,6 +247,30 @@ namespace TowerDefenseMayhem
             //MyCanvas.Dispatcher.Invoke(new Action(() => MainWindow.ChangeUserMoney(Bounty)));
             //MyCanvas.Children.Remove(MyImage);
             WasKilled = true;
+        }
+
+        public void Hurt(double dmg)
+        {
+            // switch image to 'hurt'
+            Thread t1 = new Thread(new ThreadStart(
+            delegate()
+            {
+                MyCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    new Action(delegate()
+                    {
+                        MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage_hurt)));
+
+                    }));
+                Thread.Sleep(TimeSpan.FromMilliseconds(MainWindow.LoopTime));
+                MyCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    new Action(delegate()
+                    {
+                        MyCanvas.Dispatcher.Invoke(new Action(() => DrawCreep(pathImage)));
+                    }));
+            }));
+            t1.Start();
+
+            HitPoints -= dmg;
         }
 
         public bool IsAlive()

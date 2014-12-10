@@ -155,15 +155,7 @@ namespace TowerDefenseMayhem
                 return 0;
             }
         }
-
-        //// call this after current target leaves range or dies
-        //private Creep GetNextTarget(List<Creep> globalCreeps)
-        //{
-        //    List<Creep> creepsInRange = new List<Creep>();
-        //    ////creepsInRange = FindCreepsInRange(globalCreeps);
-        //    return GetTargetNearest(creepsInRange);
-        //}
-
+        
         private void AttackCreep(Creep _creep)
         {
             // pythagorean to find hypoteneus distance
@@ -173,7 +165,7 @@ namespace TowerDefenseMayhem
             if (hypDistance <= MyWeapon.Range)
             {
                 // attack!
-                _creep.HitPoints -= MyWeapon.Damage;
+                _creep.Hurt(MyWeapon.Damage);
 
                 // check for kill condition
                 if (_creep.HitPoints <= 0)
@@ -217,7 +209,8 @@ namespace TowerDefenseMayhem
             public Weapon(double cooldownMax, double range, double damage)
             {
                 CooldownMax = cooldownMax;
-                CooldownCurrent = cooldownMax; // start in cooldown
+                //CooldownCurrent = cooldownMax; // start in cooldown
+                CooldownCurrent = 0.0; // start cooled down
                 Range = range;
                 Damage = damage;
             }
