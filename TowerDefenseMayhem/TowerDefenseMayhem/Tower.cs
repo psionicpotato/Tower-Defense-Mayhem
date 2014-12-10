@@ -56,7 +56,7 @@ namespace TowerDefenseMayhem
                     attackAnimationLength = 200;
 
                     // set initial weapon
-                    MyWeapon = new Weapon(100, 100, 2);
+                    MyWeapon = new Weapon(500, 100, 2);
 
                     break;
                 // case TowerType.Flame:

@@ -208,7 +208,7 @@ namespace TowerDefenseMayhem
                             //SpawnCreeps(type, creeps[i]) += SpawnCreepsEvent;
                             threads[i] = new Thread(() => SpawnCreeps(type, creeps[i]));
                             threads[i].Start();
-                            Thread.Sleep(100);
+                            Thread.Sleep(50);
                         }
                             
                         else
@@ -229,8 +229,7 @@ namespace TowerDefenseMayhem
             {
                 Creep newCreep = new Creep(type, Pathing.GetPath(NextLevel), TDMCanvas, this);
                 myCreeps.AllCreeps.Add(newCreep);
-                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(info[1]));
-                Thread.Sleep(100);
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(info[1]));                
             }
         }
 

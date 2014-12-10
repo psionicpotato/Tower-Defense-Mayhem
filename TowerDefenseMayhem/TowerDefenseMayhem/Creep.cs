@@ -101,7 +101,7 @@ namespace TowerDefenseMayhem
         			break;
         		case CreepType.Tanky:
         			HitPoints = 30;
-        			Speed = 0.02;
+        			Speed = 0.05;
                     RelImagePath = @"..\..\Creep Images\imageedit_1_5013384539.png";
                     Bounty = 100;
         			break;
