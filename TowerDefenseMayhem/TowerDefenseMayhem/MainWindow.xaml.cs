@@ -31,7 +31,7 @@ namespace TowerDefenseMayhem
         private Level Level;
         private Player Player;
         private List<Tower> AllTowers;
-        private int CurrentLevel = 0;
+        //private int CurrentLevel = 0;
 
         private bool LevelOver = true;   
         private const double LoopTime = 20;
@@ -68,6 +68,7 @@ namespace TowerDefenseMayhem
             NextLevel = 1;
             ReadyForNextLevel = true;
             AllTowers = new List<Tower>();
+            CurrentLevel = 0;
 
             // Listener for change money
             myCreeps.CreepDied += myCreeps_CreepDied;
@@ -112,6 +113,9 @@ namespace TowerDefenseMayhem
                 System.Windows.MessageBox.Show("Breh, you gotta finish this level first!");
                 return;
             }
+
+            CurrentLevel++;
+
             bw = new BackgroundWorker();
             bw2 = new BackgroundWorker();
             bw3 = new BackgroundWorker();
@@ -176,8 +180,7 @@ namespace TowerDefenseMayhem
             {
 
                 int level;
-                int[][] creeps = Level.GetNextLevel(out level);
-                CurrentLevel = level;
+                int[][] creeps = Level.GetNextLevel(out level);                                
 
                 //[creep type][0=#, 1= interval]
 
@@ -423,6 +426,14 @@ namespace TowerDefenseMayhem
         }
 
         public static readonly DependencyProperty LifePropery = DependencyProperty.Register("DisplayLives", typeof(int), typeof(MainWindow), new PropertyMetadata(5));
+
+        private int CurrentLevel
+        {
+            get { return (int)GetValue(LevelProperty); }
+            set { SetValue(LevelProperty, value); }
+        }
+
+        public static readonly DependencyProperty LevelProperty = DependencyProperty.Register("CurrentLevel", typeof(int), typeof(MainWindow), new PropertyMetadata(5));
 
 
         private void Source_LifeChange(object sender, EventArgs e)
