@@ -224,7 +224,7 @@ namespace TowerDefenseMayhem
         public void UpdateImage()
         {
             MyImage.SetValue(Canvas.LeftProperty,
-                        Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
+                Convert.ToDouble(PosX) - Math.Floor(MyBitmapSource.Width / 2));
             MyImage.SetValue(Canvas.TopProperty,
                 Convert.ToDouble(PosY) - Math.Floor(MyBitmapSource.Height / 2));
         }

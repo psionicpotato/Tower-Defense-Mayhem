@@ -26,7 +26,7 @@ namespace TowerDefenseMayhem
 
         public TowerType MyTowerType;
         public enum TowerType { Arrow, Flame, Radial, Bomb }
-        public Weapon MyWeapon;
+        private Weapon MyWeapon;
         public Creep TargetCreep;
         public Canvas MyCanvas;
         public BitmapSource MyBitmapSource;
@@ -124,22 +124,23 @@ namespace TowerDefenseMayhem
         // maybe include in FindCreepsInRange for now, easy enough to do
         private Creep GetTargetNearest(List<Creep> creepsInRange)
         {
+            Creep ans = null;
             // loop through creep collection positions and find nearest one
             foreach (Creep c in creepsInRange)
             {
                 if (TargetCreep == null)
                 { /* acquire new target */
-                    return c;
+                    ans = c;
                 }
                 else
                 { /* check for closer target */
                     if (GetDistanceToCreep(c) < GetDistanceToCreep(TargetCreep))
                     { /* switch to closer target */
-                        return c;
+                        ans = c;
                     }
                 }
             }
-            return null;
+            return ans;
         }
 
         private double GetDistanceToCreep(Creep c)
@@ -182,7 +183,7 @@ namespace TowerDefenseMayhem
                 }
 
                 // trigger cooldown state
-                MyWeapon.CooldownCurrent = MyWeapon.CooldownMax;
+                MyWeapon.Reload();
 
                 // switch image to 'attack'
                 Thread t1 = new Thread(new ThreadStart(
@@ -205,12 +206,12 @@ namespace TowerDefenseMayhem
             }
         }
 
-        public class Weapon
+        private class Weapon
         {
-            public double CooldownMax;
-            public double CooldownCurrent;
-            public double Range;
-            public double Damage;
+            public double CooldownMax { get; private set; }
+            public double CooldownCurrent { get; private set; }
+            public double Range { get; private set; }
+            public double Damage { get; private set; }
 
             // Constructor
             public Weapon(double cooldownMax, double range, double damage)
@@ -219,6 +220,29 @@ namespace TowerDefenseMayhem
                 CooldownCurrent = cooldownMax; // start in cooldown
                 Range = range;
                 Damage = damage;
+            }
+
+            public void Reload() 
+            {
+                CooldownCurrent = CooldownMax;
+            }
+
+            public bool IsReady()
+            {
+                if (CooldownCurrent == 0.0)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public void CooldownTick(TimeSpan ts)
+            {
+                CooldownCurrent -= ts.TotalMilliseconds;
+                if (CooldownCurrent < 0.0)
+                {
+                    CooldownCurrent = 0.0;
+                }
             }
         }
 
@@ -233,28 +257,15 @@ namespace TowerDefenseMayhem
                 TargetCreep = GetTargetNearest(creepsInRange);
 
                 // attack target if "cooled down"
-                if (TargetCreep != null && MyWeapon.CooldownCurrent == 0)
+                if (TargetCreep != null && MyWeapon.IsReady())
                 {
                     AttackCreep(TargetCreep);
                 }
             }
 
-            //if (TargetCreep != null)
-            //{
-            //    //attack target if "cooled down"
-            //    if (MyWeapon.CooldownCurrent == 0)
-            //    {
-            //        AttackCreep(TargetCreep);
-            //    }
-            //}
-
-            if (MyWeapon.CooldownCurrent >= 10)
+            if (!MyWeapon.IsReady())
             {
-                MyWeapon.CooldownCurrent -= 10;
-            }
-            else
-            {
-                MyWeapon.CooldownCurrent = 0;
+                MyWeapon.CooldownTick(timeSpan);
             }
         }
     }
